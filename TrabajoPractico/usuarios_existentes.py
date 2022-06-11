@@ -274,6 +274,9 @@ usuarios_existentes = [
                 "restricciones_alimenticias": "Vegano"}
 
 ]
+@app.route("/usuarios", methods=['GET'])
+def usuarios():#hay que poner nombres diferentes en lasfunciones
+   return jsonify({"Usuarios": usuarios_existentes})
 
 @app.route("/info_usuario/<id>", methods=['GET'])
 def usuario_get(id):#hay que poner nombres diferentes en lasfunciones
@@ -300,3 +303,12 @@ def crear_usario():
 
    usuarios_existentes.append(nuevo_usuario)
    return jsonify({'nuevo_usuario': nuevo_usuario, 'status': 'creado'})
+
+@app.route("/eliminar_usuario/<id>", methods=['DELETE'])
+
+def eliminar_usuario(id):
+    for u in usuarios_existentes:
+        if u['ID'] == id:
+            usuarios_existentes.remove(u)
+            return jsonify({'Usuario': u, 'status':'eliminado'})
+        return jsonify({'Usuario': u, 'status': 'not found'})
