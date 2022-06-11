@@ -18,4 +18,3 @@ class Usuario:
                f'\n\tRestricciones alimentarias: {self.restricciones}'
 
 #f'\n\tIMC: {self.imc}'\
-
