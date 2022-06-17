@@ -27,6 +27,6 @@ class Usuario:
             'altura': self.altura,
             'sexo': self.sexo,
             "restricciones": self.restricciones
-                }
+                } #lo transforma en diccionario para poder pasarlo a json en el "POST"
 
 #f'\n\tIMC: {self.imc}'\
