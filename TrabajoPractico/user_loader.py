@@ -1,11 +1,11 @@
 import json
 from io import open
-from usuario import Usuario
+from user_class import Usuario
 
 def load_users():
     users = []
 
-    with open("TrabajoPractico/usuarios.json", "r") as file:
+    with open("TrabajoPractico/usuarios.json", "r") as file: #para leer el json
         users_json = json.load(file)
 
         for user in users_json:
@@ -16,10 +16,10 @@ def load_users():
                                 user["sexo"],
                                 user["peso"],
                                 user["altura"],
-                                user["restricciones_alimenticias"]
+                                user["intolerancia"]
                                 )
 
-            new_user.id = user["ID"]
+            new_user.id = user["ID"] #crea un nuevo atributo ID
 
             users.append(new_user)
 
@@ -27,3 +27,5 @@ def load_users():
 
 
 # Para probar si funciona: print(load_users()[2])
+#for usuario in load_users():
+    #print(usuario)

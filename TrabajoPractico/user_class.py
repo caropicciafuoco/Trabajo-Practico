@@ -1,5 +1,5 @@
 class Usuario:
-    def __init__(self, nombre, contrasena, edad, sexo, peso, altura, restricciones):
+    def __init__(self, nombre, contrasena, edad, sexo, peso, altura, intolerancia):
         self.nombre = nombre
         self.contrasena = contrasena
         self.edad = int(edad)
@@ -7,7 +7,7 @@ class Usuario:
         self.peso = int(peso)
         self.altura = float(altura)
         #self.imc = round(int(self.peso)/int(self.altura)**2, 4)
-        self.restricciones = restricciones.lower()
+        self.intolerancia = intolerancia.lower()
 
     def __str__(self):
         return f'\n\tNombre: {self.nombre}' \
@@ -15,7 +15,7 @@ class Usuario:
                f'\n\tPeso: {self.peso}' \
                f'\n\tAltura: {self.altura}' \
                f'\n\tSexo: {self.sexo}'\
-               f'\n\tRestricciones alimentarias: {self.restricciones}'
+               f'\n\tIntolerancia: {self.intolerancia}'
 
     def serialize(self):
         return {
@@ -26,7 +26,7 @@ class Usuario:
             'peso': self.peso,
             'altura': self.altura,
             'sexo': self.sexo,
-            "restricciones": self.restricciones
+            "intolerancia": self.intolerancia
                 } #lo transforma en diccionario para poder pasarlo a json en el "POST"
 
 #f'\n\tIMC: {self.imc}'\

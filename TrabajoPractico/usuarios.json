@@ -6,7 +6,7 @@
  "sexo":"F",
  "peso": "90",
  "altura":"1.60",
- "restricciones_alimenticias": "Null"},
+ "intolerancia": []},
 
  {"nombre":"Dona Terra",
  "ID": "2",
@@ -15,7 +15,7 @@
  "sexo":"F",
  "peso": "66",
  "altura":"1.63",
- "restricciones_alimenticias": "Vegetariana"},
+ "intolerancia": ["Grain"]},
 
  {"nombre":"Juan Martinelli",
  "ID": "3",
@@ -24,7 +24,7 @@
  "sexo":"M",
  "peso": "42",
  "altura":"1.80",
- "restricciones_alimenticias": "Null"},
+ "intolerancia": []},
 
  {"nombre":"Tomas Milke",
  "ID": "4",
@@ -33,7 +33,7 @@
  "sexo":"M",
  "peso": "68",
  "altura":"1.83",
- "restricciones_alimenticias":"Alergico al mani"},
+ "intolerancia":["Peanut"]},
 
  {"nombre":"Robbie Bey",
  "ID": "5",
@@ -42,7 +42,7 @@
  "sexo":"M",
  "peso": "26",
  "altura":"1.63",
- "restricciones_alimenticias": "Celiaco"},
+ "intolerancia": ["Seafood"]},
 
  {"nombre":"Claudia Tros",
  "ID": "6",
@@ -51,7 +51,7 @@
  "sexo":"F",
  "peso": "120",
  "altura":"1.50",
- "restricciones_alimenticias": "Null"},
+ "intolerancia": []},
 
  {"nombre":"Emma Bindel",
  "ID": "7",
@@ -60,7 +60,7 @@
  "sexo":"F",
  "peso": "40",
  "altura":"1.42",
- "restricciones_alimenticias": "Alergica al tomate"},
+ "intolerancia": ["Dairy"]},
 
  {"nombre":"Kiara Perkins",
  "ID": "8",
@@ -69,7 +69,7 @@
  "sexo":"F",
  "peso": "26",
  "altura":"1.61",
- "restricciones_alimenticias": "Null"},
+ "intolerancia": []},
 
  {"nombre":"Gal Sortes",
  "ID": "9",
@@ -78,7 +78,7 @@
  "sexo":"F",
  "peso": "46",
  "altura":"1.43",
- "restricciones_alimenticias": "Celiaca"},
+ "intolerancia": ["Egg"]},
 
  {"nombre":"Mijal Benitez",
  "ID": "10",
@@ -87,7 +87,7 @@
  "sexo":"F",
  "peso": "30",
  "altura":"1.45",
- "restricciones_alimenticias": "Vegana"},
+ "intolerancia": ["Gluten"]},
 
  {"nombre":"Kevin Tel",
  "ID": "11",
@@ -96,7 +96,7 @@
  "sexo":"M",
  "peso": "100",
  "altura":"1.70",
- "restricciones_alimenticias": "Intolerante a la lactosa"},
+ "intolerancia": ["Sesame"]},
 
  {"nombre":"Maximo Zas",
  "ID": "12",
@@ -105,7 +105,7 @@
  "sexo":"M",
  "peso": "114",
  "altura":"1.54",
- "restricciones_alimenticias": "Vegetariano"},
+ "intolerancia": ["Shellfish"]},
 
  {"nombre":"Yanina Arias",
  "ID": "13",
@@ -114,7 +114,7 @@
  "sexo":"F",
  "peso": "180",
  "altura":"1.78",
- "restricciones_alimenticias": "Alergica a la palta"},
+ "intolerancia": ["Soy"]},
 
  {"nombre":"Tamara Ruiz",
  "ID": "14",
@@ -123,7 +123,7 @@
  "sexo":"F",
  "peso": "70",
  "altura":"1.78",
- "restricciones_alimenticias": "Vegetariana"},
+ "intolerancia": ["Sulfite"]},
 
  {"nombre":"Solana Jaichenco",
  "ID": "15",
@@ -132,7 +132,7 @@
  "sexo":"F",
  "peso": "58",
  "altura":"1.75",
- "restricciones_alimenticias": "Null"},
+ "intolerancia": []},
 
  {"nombre":"Magali Ringler",
  "ID": "16",
@@ -141,7 +141,7 @@
  "sexo":"F",
  "peso": "50",
  "altura":"1.59",
- "restricciones_alimenticias": "Null"},
+ "intolerancia": []},
 
  {"nombre":"Valentina Pinto",
  "ID": "17",
@@ -150,7 +150,7 @@
  "sexo":"F",
  "peso": "73",
  "altura":"1.71",
- "restricciones_alimenticias": "Null"},
+ "intolerancia": []},
 
  {"nombre":"Federico Jaraj",
  "ID": "18",
@@ -159,7 +159,7 @@
  "sexo":"M",
  "peso": "60",
  "altura":"2.00",
- "restricciones_alimenticias": "Null"},
+ "intolerancia": []},
 
  {"nombre":"Gaston Madrin",
  "ID": "19",
@@ -168,7 +168,7 @@
  "sexo":"M",
  "peso": "82",
  "altura":"1.62",
- "restricciones_alimenticias": "Celiaco"},
+ "intolerancia": ["Tree Nut"]},
 
  {"nombre":"Gabriel Perez",
  "ID": "20",
@@ -177,7 +177,7 @@
  "sexo":"M",
  "peso": "88",
  "altura":"1.84",
- "restricciones_alimenticias": "Intolerante a la verdura cruda"},
+ "intolerancia": ["Wheat"]},
 
  {"nombre":"Daniel Lincoln",
  "ID": "21",
@@ -186,7 +186,7 @@
  "sexo":"M",
  "peso": "67",
  "altura":"1.76",
- "restricciones_alimenticias": "Vegano"},
+ "intolerancia": ["Peanut"]},
 
  {"nombre":"Victor Leda",
  "ID": "22",
@@ -195,7 +195,7 @@
  "sexo":"M",
  "peso": "60",
  "altura":"1.63",
- "restricciones_alimenticias": "Alergico a la nuez"},
+ "intolerancia": ["Egg"]},
 
  {"nombre":"Adrian Lucero",
  "ID": "23",
@@ -204,7 +204,7 @@
  "sexo":"M",
  "peso": "86",
  "altura":"1.64",
- "restricciones_alimenticias": "Vegetariano"},
+ "intolerancia": ["Gluten"]},
 
  {"nombre":"Leandro Repis",
  "ID": "24",
@@ -213,7 +213,7 @@
  "sexo":"M",
  "peso": "58",
  "altura":"1.50",
- "restricciones_alimenticias": "Null"},
+ "intolerancia": []},
 
  {"nombre":"Martina Teitel",
  "ID": "25",
@@ -222,7 +222,7 @@
  "sexo":"F",
  "peso": "63",
  "altura":"1.62",
- "restricciones_alimenticias": "Null"},
+ "intolerancia": []},
 
  {"nombre":"Mariana Piczman",
  "ID":"26",
@@ -231,7 +231,7 @@
  "sexo":"F",
  "peso": "65",
  "altura":"1.85",
- "restricciones_alimenticias": "Null"},
+ "intolerancia": []},
 
  {"nombre":"Veronica Jarosky",
  "ID":"27",
@@ -240,7 +240,7 @@
  "sexo":"F",
  "peso": "25",
  "altura":"1.35",
- "restricciones_alimenticias": "Null"},
+ "intolerancia": []},
 
  {"nombre":"Mora Glit",
  "ID":"28",
@@ -249,7 +249,7 @@
  "sexo":"F",
  "peso": "59",
  "altura":"1.68",
- "restricciones_alimenticias": "Null"},
+ "intolerancia": []},
 
  {"nombre":"Nicole Tokla",
  "ID":"29",
@@ -258,7 +258,7 @@
  "sexo":"F",
  "peso": "53",
  "altura":"1.66",
- "restricciones_alimenticias": "Null"},
+ "intolerancia": []},
 
  {"nombre":"Martin Blarg",
  "ID":"30",
@@ -267,5 +267,5 @@
  "sexo":"M",
  "peso": "94",
  "altura":"1.95",
- "restricciones_alimenticias": "Vegano"}
+ "intolerancia": ["Wheat"]}
  ]

@@ -1,4 +1,4 @@
-from usuario import Usuario
+from user_class import Usuario
 
 ejemplo = Usuario('J', '1', '22', 'f', '60', '165', 'no')
 

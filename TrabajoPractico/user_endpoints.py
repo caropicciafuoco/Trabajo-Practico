@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 
 from user_loader import load_users
-from usuario import Usuario
+from user_class import Usuario
 
 app = Flask(__name__)
 users = load_users()
@@ -23,16 +23,16 @@ def usuario_get(ID):  # hay que poner nombres diferentes en las funciones
                             "Altura": u.altura,
                             "Peso": u.peso,
                             "Restriccion Alimenticias": u.restricciones,
-                            "status": "existente"}) #se usa jsonify para transformar diccionarios a json y es necesario porque la API solo trabaja con json
+                            "Status": "existente"}) #se usa jsonify para transformar diccionarios a json y es necesario porque la API solo trabaja con json
 
     return jsonify({"ID buscado": ID,
-                    "status": "not found"}) #
+                    "Status": "not found"}) #
 
 
 @app.route("/crear_usuario", methods=['POST'])
 def crear_usario():
     body = request.json #simboliza el body de postman
-    nombre = body['nombre'] #
+    nombre = body['nombre']
     contrasena = body['contrasena']
     edad = body['edad']
     sexo = body['sexo']
@@ -57,7 +57,40 @@ def eliminar_usuario(ID):
         if u.id == ID:
             users.remove(u)
             return jsonify({'Usuario': u.serialize(),
-                            'status': 'eliminado'})
+                            'Status': 'eliminado'})
 
-            return jsonify({'Usuario': u.serialize(),
-                            'status': 'not found'})
+    return jsonify({'ID buscado': ID,
+                    'Status': 'not found'})
+
+
+@app.route("/cambiar_peso", methods=['PUT'])
+def cambiar_peso():
+    body = request.json
+    ID = body['id']
+    nuevo_peso = body['peso']
+
+    for u in users:
+        if u.id == ID:
+            u.peso = nuevo_peso
+            return jsonify({'Usuario' : u.serialize(),
+                            'Nuevo Peso' : u.peso,
+                            'Status' : 'peso actualizado'})
+
+    return jsonify({'ID buscado': ID,
+                    'Status': 'not found'})
+
+@app.route("/cambiar_contrasena", methods=['PUT'])
+def cambiar_contrasena():
+    body = request.json
+    ID = body['id']
+    nueva_contrasena = body['contrasena']
+
+    for u in users:
+        if u.id == ID:
+            u.contrasena = nueva_contrasena
+            return jsonify({'Usuario' : u.serialize(),
+                            'Nueva Contraseña' : nueva_contrasena,
+                            'Status' : 'contraseña actualizada'})
+
+    return jsonify({'ID buscado': ID,
+                    'Status': 'not found'})
