@@ -1,11 +1,11 @@
 class Usuario:
-    def __init__(self, nombre, contraseña, edad, sexo, peso, altura, restricciones):
+    def __init__(self, nombre, contrasena, edad, sexo, peso, altura, restricciones):
         self.nombre = nombre
-        self.contraseña = contraseña
+        self.contrasena = contrasena
         self.edad = int(edad)
         self.sexo = sexo.upper()
         self.peso = int(peso)
-        self.altura = int(altura)
+        self.altura = float(altura)
         #self.imc = round(int(self.peso)/int(self.altura)**2, 4)
         self.restricciones = restricciones.lower()
 
@@ -16,5 +16,17 @@ class Usuario:
                f'\n\tAltura: {self.altura}' \
                f'\n\tSexo: {self.sexo}'\
                f'\n\tRestricciones alimentarias: {self.restricciones}'
+
+    def serialize(self):
+        return {
+            'nombre': self.nombre,
+            "contrasena": self.contrasena,
+            "ID": self.id,
+            'edad': self.edad,
+            'peso': self.peso,
+            'altura': self.altura,
+            'sexo': self.sexo,
+            "restricciones": self.restricciones
+                }
 
 #f'\n\tIMC: {self.imc}'\
