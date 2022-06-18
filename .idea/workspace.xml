@@ -6,12 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="7082fc12-00ec-43ae-a60b-6e1a922e3f08" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TrabajoPractico/User_loader.py" beforeDir="false" afterPath="$PROJECT_DIR$/TrabajoPractico/user_loader.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TrabajoPractico/main.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TrabajoPractico/menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/TrabajoPractico/menu.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TrabajoPractico/usuario.py" beforeDir="false" afterPath="$PROJECT_DIR$/TrabajoPractico/user_class.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TrabajoPractico/usuarios.json" beforeDir="false" afterPath="$PROJECT_DIR$/TrabajoPractico/usuarios.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TrabajoPractico/usuarios_existentes.py" beforeDir="false" afterPath="$PROJECT_DIR$/TrabajoPractico/user_endpoints.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,6 +31,12 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="PUSH_TAGS">
+      <GitPushTagMode>
+        <option name="argument" value="--tags" />
+        <option name="title" value="All" />
+      </GitPushTagMode>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitSEFilterConfiguration">
@@ -57,7 +57,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="ChangesTree.GroupingKeys" value="" />
+    <property name="ChangesTree.GroupingKeys" value="repository&#10;directory" />
     <property name="GitStage.ChangesTree.GroupingKeys" value="directory&#10;module&#10;repository" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
@@ -219,6 +219,8 @@
       <workItem from="1654972684648" duration="2826000" />
       <workItem from="1654976182870" duration="5332000" />
       <workItem from="1655494096306" duration="2524000" />
+      <workItem from="1655497103791" duration="402000" />
+      <workItem from="1655508496944" duration="4395000" />
     </task>
     <task id="LOCAL-00001" summary="&quot;new example&quot;">
       <created>1654779352646</created>
@@ -241,7 +243,14 @@
       <option name="project" value="LOCAL" />
       <updated>1655496570763</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="&quot;GET obtener_receta (tiene un error que hay que arreglar, pero funciona)&quot;">
+      <created>1655517871249</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1655517871249</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -261,11 +270,12 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="&quot;new example&quot;" />
     <MESSAGE value="&quot;Avance endpoints&quot;" />
-    <option name="LAST_COMMIT_MESSAGE" value="&quot;Avance endpoints&quot;" />
+    <MESSAGE value="&quot;GET obtener_receta (tiene un error que hay que arreglar, pero funciona)&quot;" />
+    <option name="LAST_COMMIT_MESSAGE" value="&quot;GET obtener_receta (tiene un error que hay que arreglar, pero funciona)&quot;" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/pythonProject2_git_demo$menu.coverage" NAME="menu Coverage Results" MODIFIED="1654977050266" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/CarpetaDemoGit" />
-    <SUITE FILE_PATH="coverage/pythonProject2_git_demo$Flask__TrabajoPractico_user_endpoints_py_.coverage" NAME="Flask (TrabajoPractico/user_endpoints.py) Coverage Results" MODIFIED="1655496541697" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/pythonProject2_git_demo$Flask__TrabajoPractico_user_endpoints_py_.coverage" NAME="Flask (TrabajoPractico/user_endpoints.py) Coverage Results" MODIFIED="1655517349941" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/pythonProject2_git_demo$Flask__TrabajoPractico_usuarios_existentes_py_.coverage" NAME="Flask (TrabajoPractico/user_endpoints.py) Coverage Results" MODIFIED="1655491981817" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/pythonProject2_git_demo$usuarios_existentes.coverage" NAME="usuarios_existentes Coverage Results" MODIFIED="1654977290251" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/TrabajoPractico" />
     <SUITE FILE_PATH="coverage/pythonProject2_git_demo$user_loader.coverage" NAME="user_loader Coverage Results" MODIFIED="1655489907608" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/TrabajoPractico" />

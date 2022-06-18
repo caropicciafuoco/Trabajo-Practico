@@ -120,9 +120,9 @@ def menu_principal():
             sexo = input('\tSexo (M o F) >> ')
             peso = input('\tPeso (en kg) >> ')
             altura = input('\tAltura (en cm) >> ')
-            restricciones = (input('\t¿Cuenta con alguna restriccion alimenticia? (ingrese si o no) >> ')) #falta poner cual es la restriccion alimenticia
+            intolerancia = (input('\t¿Cuenta con alguna intolerancia? (ingrese si o no) >> ')) #falta poner cual es la restriccion alimenticia
 
-            usuario = Usuario(nombre, contraseña, edad, sexo, peso, altura, restricciones)
+            usuario = Usuario(nombre, contraseña, edad, sexo, peso, altura, intolerancia)
 
             lista_usuarios.append(usuario)
 

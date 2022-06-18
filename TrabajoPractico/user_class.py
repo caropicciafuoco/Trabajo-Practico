@@ -7,7 +7,7 @@ class Usuario:
         self.peso = int(peso)
         self.altura = float(altura)
         #self.imc = round(int(self.peso)/int(self.altura)**2, 4)
-        self.intolerancia = intolerancia.lower()
+        self.intolerancia = intolerancia #.lower() no te deja porque es una lista
 
     def __str__(self):
         return f'\n\tNombre: {self.nombre}' \

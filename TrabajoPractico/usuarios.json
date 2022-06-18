@@ -33,7 +33,7 @@
  "sexo":"M",
  "peso": "68",
  "altura":"1.83",
- "intolerancia":["Peanut"]},
+ "intolerancia":["Peanut", "Wheat"]},
 
  {"nombre":"Robbie Bey",
  "ID": "5",

@@ -7,3 +7,9 @@ class Receta:
     def __str__(self):
         return f'\n\t~ {self.title} ~' \
                f'\n\tId: {self.id}'
+
+    def serialize(self):
+        return {
+            'Title': self.title,
+            'ID': self.id
+        }
