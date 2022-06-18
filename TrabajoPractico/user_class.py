@@ -1,34 +1,33 @@
 import uuid
 
-class Usuario:
-    def __init__(self, nombre, contrasena, edad, sexo, peso, altura, intolerancia):
+
+class User:
+    def __init__(self, name, password, age, gender, weight, height, intolerance):
         self.id = (str(uuid.uuid4()))[:8]
-        self.nombre = nombre
-        self.contrasena = contrasena
-        self.edad = int(edad)
-        self.sexo = sexo.upper()
-        self.peso = int(peso)
-        self.altura = float(altura)
-        self.intolerancia = intolerancia
+        self.name = name
+        self.password = password
+        self.age = int(age)
+        self.gender = gender.upper()
+        self.weight = int(weight)
+        self.height = float(height)
+        self.intolerance = intolerance
 
     def __str__(self):
-        return f'\n\tNombre: {self.nombre}' \
-               f'\n\tEdad: {self.edad}' \
-               f'\n\tPeso: {self.peso}' \
-               f'\n\tAltura: {self.altura}' \
-               f'\n\tSexo: {self.sexo}'\
-               f'\n\tIntolerancia: {self.intolerancia}'
+        return f'\n\tNombre: {self.name}' \
+               f'\n\tEdad: {self.age}' \
+               f'\n\tPeso: {self.weight}' \
+               f'\n\tAltura: {self.height}' \
+               f'\n\tSexo: {self.gender}'\
+               f'\n\tIntolerancia: {self.intolerance}'
 
     def serialize(self):
         return {
             'ID': self.id,
-            'nombre': self.nombre,
-            "contrasena": self.contrasena,
-            "ID": self.id,
-            'edad': self.edad,
-            'peso': self.peso,
-            'altura': self.altura,
-            'sexo': self.sexo,
-            "intolerancia": self.intolerancia
-                } #lo transforma en diccionario para poder pasarlo a json en el "POST"
-
+            'nombre': self.name,
+            "password": self.password,
+            'age': self.age,
+            'weight': self.weight,
+            'height': self.height,
+            'gender': self.gender,
+            "intolerance": self.intolerance
+                }  # lo transforma en diccionario para poder pasarlo a json en el "POST"

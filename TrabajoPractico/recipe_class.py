@@ -1,5 +1,5 @@
 
-class Receta:
+class Recipe:
     def __init__(self, title, id, servings, cooking_time, ingredients):
         self.title = title
         self.id = id
@@ -20,5 +20,5 @@ class Receta:
             'ID': self.id,
             'Servings': self.servings,
             'Cooking time': self.cooking_time,
-            'Ingredients' : self.ingredients
+            'Ingredients': self.ingredients
         }
