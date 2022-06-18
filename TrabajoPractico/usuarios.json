@@ -24,7 +24,6 @@
  "intolerancia": []},
 
  {"nombre":"Tomas Milke",
- "ID": "4",
  "contrasena":"Tomas123",
  "edad":"19",
  "sexo":"M",
@@ -33,7 +32,6 @@
  "intolerancia":["Peanut", "Wheat"]},
 
  {"nombre":"Robbie Bey",
- "ID": "5",
  "contrasena":"Robbie123",
  "edad":"13",
  "sexo":"M",
@@ -42,7 +40,6 @@
  "intolerancia": ["Seafood"]},
 
  {"nombre":"Claudia Tros",
- "ID": "6",
  "contrasena":"Claudia123",
  "edad":"60",
  "sexo":"F",
@@ -51,7 +48,6 @@
  "intolerancia": []},
 
  {"nombre":"Emma Bindel",
- "ID": "7",
  "contrasena":"Emma123",
  "edad":"20",
  "sexo":"F",
@@ -60,7 +56,6 @@
  "intolerancia": ["Dairy"]},
 
  {"nombre":"Kiara Perkins",
- "ID": "8",
  "contrasena":"Kiara123",
  "edad":"13",
  "sexo":"F",
@@ -69,7 +64,6 @@
  "intolerancia": []},
 
  {"nombre":"Gal Sortes",
- "ID": "9",
  "contrasena":"Gal123",
  "edad":"23",
  "sexo":"F",
@@ -78,7 +72,6 @@
  "intolerancia": ["Gluten","Egg"]},
 
  {"nombre":"Mijal Benitez",
- "ID": "10",
  "contrasena":"Mijal123",
  "edad":"15",
  "sexo":"F",
@@ -87,7 +80,6 @@
  "intolerancia": ["Gluten"]},
 
  {"nombre":"Kevin Tel",
- "ID": "11",
  "contrasena":"Kevin123",
  "edad":"50",
  "sexo":"M",
@@ -96,7 +88,6 @@
  "intolerancia": ["Sesame"]},
 
  {"nombre":"Maximo Zas",
- "ID": "12",
  "contrasena":"Maximo123",
  "edad":"53",
  "sexo":"M",
@@ -105,7 +96,6 @@
  "intolerancia": ["Shellfish"]},
 
  {"nombre":"Yanina Arias",
- "ID": "13",
  "contrasena":"Yanina123",
  "edad":"90",
  "sexo":"F",
@@ -114,7 +104,6 @@
  "intolerancia": ["Soy"]},
 
  {"nombre":"Tamara Ruiz",
- "ID": "14",
  "contrasena":"Tamara123",
  "edad":"86",
  "sexo":"F",
@@ -123,7 +112,6 @@
  "intolerancia": ["Sulfite"]},
 
  {"nombre":"Solana Jaichenco",
- "ID": "15",
  "contrasena":"Solana123",
  "edad":"57",
  "sexo":"F",
@@ -132,7 +120,6 @@
  "intolerancia": []},
 
  {"nombre":"Magali Ringler",
- "ID": "16",
  "contrasena":"Magali123",
  "edad":"49",
  "sexo":"F",
@@ -141,7 +128,6 @@
  "intolerancia": []},
 
  {"nombre":"Valentina Pinto",
- "ID": "17",
  "contrasena":"Valentina123",
  "edad":"10",
  "sexo":"F",
@@ -150,7 +136,6 @@
  "intolerancia": []},
 
  {"nombre":"Federico Jaraj",
- "ID": "18",
  "contrasena":"Federico123",
  "edad":"94",
  "sexo":"M",
@@ -159,7 +144,6 @@
  "intolerancia": []},
 
  {"nombre":"Gaston Madrin",
- "ID": "19",
  "contrasena":"Gaston123",
  "edad":"66",
  "sexo":"M",
@@ -168,7 +152,6 @@
  "intolerancia": ["Tree Nut"]},
 
  {"nombre":"Gabriel Perez",
- "ID": "20",
  "contrasena":"Gabriel123",
  "edad":"44",
  "sexo":"M",
@@ -177,7 +160,6 @@
  "intolerancia": ["Wheat"]},
 
  {"nombre":"Daniel Lincoln",
- "ID": "21",
  "contrasena":"Daniel123",
  "edad":"87",
  "sexo":"M",
@@ -186,7 +168,6 @@
  "intolerancia": ["Peanut"]},
 
  {"nombre":"Victor Leda",
- "ID": "22",
  "contrasena":"Victor123",
  "edad":"30",
  "sexo":"M",
@@ -195,7 +176,6 @@
  "intolerancia": ["Egg"]},
 
  {"nombre":"Adrian Lucero",
- "ID": "23",
  "contrasena":"Adrian123",
  "edad":"40",
  "sexo":"M",
@@ -204,7 +184,6 @@
  "intolerancia": ["Gluten"]},
 
  {"nombre":"Leandro Repis",
- "ID": "24",
  "contrasena":"Leandro123",
  "edad":"29",
  "sexo":"M",
@@ -213,7 +192,6 @@
  "intolerancia": []},
 
  {"nombre":"Martina Teitel",
- "ID": "25",
  "contrasena":"Martina123",
  "edad":"22",
  "sexo":"F",
@@ -222,7 +200,6 @@
  "intolerancia": []},
 
  {"nombre":"Mariana Piczman",
- "ID":"26",
  "contrasena":"Mariana123",
  "edad":"58",
  "sexo":"F",
@@ -231,7 +208,6 @@
  "intolerancia": []},
 
  {"nombre":"Veronica Jarosky",
- "ID":"27",
  "contrasena":"Veronica123",
  "edad":"9",
  "sexo":"F",
@@ -240,7 +216,6 @@
  "intolerancia": []},
 
  {"nombre":"Mora Glit",
- "ID":"28",
  "contrasena":"Mora123",
  "edad":"63",
  "sexo":"F",
@@ -249,7 +224,6 @@
  "intolerancia": []},
 
  {"nombre":"Nicole Tokla",
- "ID":"29",
  "contrasena":"Nicole123",
  "edad":"95",
  "sexo":"F",
@@ -258,7 +232,6 @@
  "intolerancia": []},
 
  {"nombre":"Martin Blarg",
- "ID":"30",
  "contrasena":"Martin123",
  "edad":"37",
  "sexo":"M",

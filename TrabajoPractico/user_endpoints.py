@@ -26,7 +26,7 @@ def usuario_get(ID):  # hay que poner nombres diferentes en las funciones
                             "Edad": u.edad,
                             "Altura": u.altura,
                             "Peso": u.peso,
-                            "Intolerancias": u.intolerancia,
+                            "Intolerancia": u.intolerancia,
                             "Status": "existente"}) #se usa jsonify para transformar diccionarios a json y es necesario
             # porque la API solo trabaja con json
 
@@ -68,7 +68,7 @@ def eliminar_usuario(ID):
         if u.id == ID:
             users.remove(u)
             return jsonify({'Usuario': u.serialize(),
-                            'Status': 'usuario eliminado'})
+                            'Status': 'eliminado'})
 
     return jsonify({'ID buscado': ID,
                     'Status': 'not found'})
@@ -77,7 +77,7 @@ def eliminar_usuario(ID):
 @app.route("/cambiar_peso", methods=['PUT'])
 def cambiar_peso():
     body = request.json
-    ID = body['ID']
+    ID = body['id']
     nuevo_peso = body['peso']
 
     for u in users:
@@ -105,7 +105,7 @@ def cambiar_contrasena():
         if u.id == ID:
             u.contrasena = nueva_contrasena
             return jsonify({'Usuario' : u.serialize(),
-                            'Nueva Contrasena' : nueva_contrasena,
+                            'Nueva Contraseña' : nueva_contrasena,
                             'Status' : 'contraseña actualizada'})
 
     return jsonify({'ID buscado': ID,

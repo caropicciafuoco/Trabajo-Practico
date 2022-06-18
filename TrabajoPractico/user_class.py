@@ -9,12 +9,10 @@ class Usuario:
         self.sexo = sexo.upper()
         self.peso = int(peso)
         self.altura = float(altura)
-        self.intolerancia = intolerancia 
-
+        self.intolerancia = intolerancia
 
     def __str__(self):
-        return f'\n\tID: {self.id}' \
-               f'\n\tNombre: {self.nombre}' \
+        return f'\n\tNombre: {self.nombre}' \
                f'\n\tEdad: {self.edad}' \
                f'\n\tPeso: {self.peso}' \
                f'\n\tAltura: {self.altura}' \
@@ -25,11 +23,12 @@ class Usuario:
         return {
             'ID': self.id,
             'nombre': self.nombre,
-            'contrasena': self.contrasena,
+            "contrasena": self.contrasena,
+            "ID": self.id,
             'edad': self.edad,
             'peso': self.peso,
             'altura': self.altura,
             'sexo': self.sexo,
-            'intolerancia': self.intolerancia
+            "intolerancia": self.intolerancia
                 } #lo transforma en diccionario para poder pasarlo a json en el "POST"
 

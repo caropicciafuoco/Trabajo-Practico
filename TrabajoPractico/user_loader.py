@@ -5,7 +5,7 @@ from user_class import Usuario
 def load_users():
     users = []
 
-    with open("TrabajoPractico/usuarios.json", "r") as file: #para leer el json
+    with open("usuarios.json", "r") as file: #para leer el json
         users_json = json.load(file)
 
         for user in users_json:
