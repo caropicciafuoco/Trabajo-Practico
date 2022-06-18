@@ -24,13 +24,13 @@ class Usuario:
 
     def serialize(self):
         return {
-            "ID": self.id,
+            'ID': self.id,
             'nombre': self.nombre,
-            "contrasena": self.contrasena,
+            'contrasena': self.contrasena,
             'edad': self.edad,
             'peso': self.peso,
             'altura': self.altura,
             'sexo': self.sexo,
-            "intolerancia": self.intolerancia
+            'intolerancia': self.intolerancia
                 } #lo transforma en diccionario para poder pasarlo a json en el "POST"
 
