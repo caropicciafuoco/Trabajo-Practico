@@ -10,7 +10,7 @@ class Usuario:
         self.sexo = sexo.upper()
         self.peso = int(peso)
         self.altura = float(altura)
-        self.intolerancia = intolerancia #.lower() no te deja porque es una lista
+        self.intolerancia = intolerancia 
 
 
     def __str__(self):
