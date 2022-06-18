@@ -1,6 +1,5 @@
 [
  {"nombre":"Carla Estevez",
- "ID": "1",
  "contrasena":"Carla123",
  "edad":"45",
  "sexo":"F",
@@ -9,7 +8,6 @@
  "intolerancia": []},
 
  {"nombre":"Dona Terra",
- "ID": "2",
  "contrasena":"Dona123",
  "edad":"33",
  "sexo":"F",
@@ -18,7 +16,6 @@
  "intolerancia": ["Grain"]},
 
  {"nombre":"Juan Martinelli",
- "ID": "3",
  "contrasena":"Juan123",
  "edad":"21",
  "sexo":"M",

@@ -27,7 +27,8 @@ def usuario_get(ID):  # hay que poner nombres diferentes en las funciones
                             "Altura": u.altura,
                             "Peso": u.peso,
                             "Intolerancias": u.intolerancia,
-                            "Status": "existente"}) #se usa jsonify para transformar diccionarios a json y es necesario porque la API solo trabaja con json
+                            "Status": "existente"}) #se usa jsonify para transformar diccionarios a json y es necesario
+            # porque la API solo trabaja con json
 
     return jsonify({"ID buscado": ID,
                     "Status": "not found"}) #
@@ -48,8 +49,18 @@ def crear_usario():
 
     users.append(nuevo_usuario) #agrega el objeto a la lista users
 
-    return jsonify({'nuevo_usuario': nuevo_usuario.serialize(), 'status': 'creado'}) #devuelve en la API un diccionario que te muestra al nuevo objeto
+    return jsonify({'nuevo_usuario': nuevo_usuario.serialize(), 'status': 'creado'}) #devuelve en la API un diccionario
+    # que te muestra al nuevo objeto
 
+    '''{
+        "nombre": "Carolina Picciafuoco",
+        "contrasena": "hbflwhd",
+        "edad": "19",
+        "sexo": "F",
+        "peso": "50",
+        "altura": "1.60",
+        "intolerancia": []
+    }''' #usuario de prueba para postman
 
 @app.route("/eliminar_usuario/<ID>", methods=['DELETE'])
 def eliminar_usuario(ID):
@@ -66,7 +77,7 @@ def eliminar_usuario(ID):
 @app.route("/cambiar_peso", methods=['PUT'])
 def cambiar_peso():
     body = request.json
-    ID = body['id']
+    ID = body['ID']
     nuevo_peso = body['peso']
 
     for u in users:
@@ -79,6 +90,11 @@ def cambiar_peso():
     return jsonify({'ID buscado': ID,
                     'Status': 'not found'})
 
+    '''{
+        "id": "",
+        "peso": 70
+    }''' #prueba para postman
+
 @app.route("/cambiar_contrasena", methods=['PUT'])
 def cambiar_contrasena():
     body = request.json
@@ -89,12 +105,16 @@ def cambiar_contrasena():
         if u.id == ID:
             u.contrasena = nueva_contrasena
             return jsonify({'Usuario' : u.serialize(),
-                            'Nueva Contraseña' : nueva_contrasena,
+                            'Nueva Contrasena' : nueva_contrasena,
                             'Status' : 'contraseña actualizada'})
 
     return jsonify({'ID buscado': ID,
                     'Status': 'not found'})
 
+    '''{
+        "id": "",
+        "contrasena": "holamundo"
+    }''' #prueba para postman
 
 
 @app.route("/obtener_receta/<ID>", methods=['GET'])
@@ -110,13 +130,15 @@ def obtener_receta(ID):
                 else:
                     parametro_intolerancia += ',+' + intolerancia
 
-    http_recetas = (requests.get(url_recetas, params={'apiKey':'bebbf46b8c6c4453b8b051dfca6f3f73', 'intolerance': parametro_intolerancia, 'number':5})).json()
+    http_recetas = (requests.get(url_recetas, params={'apiKey':'bebbf46b8c6c4453b8b051dfca6f3f73',
+                                                      'intolerance': parametro_intolerancia, 'number':5})).json()
 
     recipe_list = []
 
     for r in http_recetas['results']:
         url_complete_recipe = f"https://api.spoonacular.com/recipes/{r['id']}/information"
-        http_complete_recipe = (requests.get(url_complete_recipe, params={'apiKey': 'bebbf46b8c6c4453b8b051dfca6f3f73'})).json()
+        http_complete_recipe = (requests.get(url_complete_recipe,
+                                             params={'apiKey': 'bebbf46b8c6c4453b8b051dfca6f3f73'})).json()
 
         title = http_complete_recipe['title']
         id = http_complete_recipe['id']
@@ -133,4 +155,3 @@ def obtener_receta(ID):
         recipe_list.append(receta)
 
     return jsonify([r.serialize() for r in recipe_list])
-
