@@ -75,6 +75,28 @@
     </key>
   </component>
   <component name="RunManager" selected="Flask server.Flask (TrabajoPractico/user_endpoints.py)">
+    <configuration name="id_usuarios" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="pythonProject2_git_demo" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/TrabajoPractico/.idea" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/TrabajoPractico/.idea/id_usuarios.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="pythonProject2_git_demo" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -184,9 +206,11 @@
       <item itemvalue="Python.user_endpoints" />
       <item itemvalue="Python.menu" />
       <item itemvalue="Python.user_loader" />
+      <item itemvalue="Python.id_usuarios" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.id_usuarios" />
         <item itemvalue="Python.user_loader" />
         <item itemvalue="Python.menu" />
       </list>
@@ -220,7 +244,8 @@
       <workItem from="1654976182870" duration="5332000" />
       <workItem from="1655494096306" duration="2524000" />
       <workItem from="1655497103791" duration="402000" />
-      <workItem from="1655508496944" duration="4395000" />
+      <workItem from="1655508496944" duration="5098000" />
+      <workItem from="1655559354139" duration="4858000" />
     </task>
     <task id="LOCAL-00001" summary="&quot;new example&quot;">
       <created>1654779352646</created>
@@ -274,8 +299,9 @@
     <option name="LAST_COMMIT_MESSAGE" value="&quot;GET obtener_receta (tiene un error que hay que arreglar, pero funciona)&quot;" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/pythonProject2_git_demo$id_usuarios.coverage" NAME="id_usuarios Coverage Results" MODIFIED="1655561151111" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/TrabajoPractico/.idea" />
     <SUITE FILE_PATH="coverage/pythonProject2_git_demo$menu.coverage" NAME="menu Coverage Results" MODIFIED="1654977050266" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/CarpetaDemoGit" />
-    <SUITE FILE_PATH="coverage/pythonProject2_git_demo$Flask__TrabajoPractico_user_endpoints_py_.coverage" NAME="Flask (TrabajoPractico/user_endpoints.py) Coverage Results" MODIFIED="1655517349941" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/pythonProject2_git_demo$Flask__TrabajoPractico_user_endpoints_py_.coverage" NAME="Flask (TrabajoPractico/user_endpoints.py) Coverage Results" MODIFIED="1655564664125" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/pythonProject2_git_demo$Flask__TrabajoPractico_usuarios_existentes_py_.coverage" NAME="Flask (TrabajoPractico/user_endpoints.py) Coverage Results" MODIFIED="1655491981817" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/pythonProject2_git_demo$usuarios_existentes.coverage" NAME="usuarios_existentes Coverage Results" MODIFIED="1654977290251" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/TrabajoPractico" />
     <SUITE FILE_PATH="coverage/pythonProject2_git_demo$user_loader.coverage" NAME="user_loader Coverage Results" MODIFIED="1655489907608" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/TrabajoPractico" />

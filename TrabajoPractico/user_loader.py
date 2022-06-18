@@ -9,6 +9,7 @@ def load_users():
         users_json = json.load(file)
 
         for user in users_json:
+
             new_user = Usuario(
                                 user["nombre"],
                                 user["contrasena"],
@@ -18,8 +19,6 @@ def load_users():
                                 user["altura"],
                                 user["intolerancia"]
                                 )
-
-            new_user.id = user["ID"] #crea un nuevo atributo ID
 
             users.append(new_user)
 

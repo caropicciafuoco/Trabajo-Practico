@@ -1,16 +1,21 @@
+
+import uuid
+
 class Usuario:
     def __init__(self, nombre, contrasena, edad, sexo, peso, altura, intolerancia):
+        self.id = (str(uuid.uuid4()))[:8]
         self.nombre = nombre
         self.contrasena = contrasena
         self.edad = int(edad)
         self.sexo = sexo.upper()
         self.peso = int(peso)
         self.altura = float(altura)
-        #self.imc = round(int(self.peso)/int(self.altura)**2, 4)
         self.intolerancia = intolerancia #.lower() no te deja porque es una lista
 
+
     def __str__(self):
-        return f'\n\tNombre: {self.nombre}' \
+        return f'\n\tID: {self.id}' \
+               f'\n\tNombre: {self.nombre}' \
                f'\n\tEdad: {self.edad}' \
                f'\n\tPeso: {self.peso}' \
                f'\n\tAltura: {self.altura}' \
@@ -19,9 +24,9 @@ class Usuario:
 
     def serialize(self):
         return {
+            "ID": self.id,
             'nombre': self.nombre,
             "contrasena": self.contrasena,
-            "ID": self.id,
             'edad': self.edad,
             'peso': self.peso,
             'altura': self.altura,
@@ -29,4 +34,3 @@ class Usuario:
             "intolerancia": self.intolerancia
                 } #lo transforma en diccionario para poder pasarlo a json en el "POST"
 
-#f'\n\tIMC: {self.imc}'\

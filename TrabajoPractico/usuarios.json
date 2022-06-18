@@ -78,7 +78,7 @@
  "sexo":"F",
  "peso": "46",
  "altura":"1.43",
- "intolerancia": ["Egg"]},
+ "intolerancia": ["Gluten","Egg"]},
 
  {"nombre":"Mijal Benitez",
  "ID": "10",
