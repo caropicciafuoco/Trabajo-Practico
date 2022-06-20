@@ -5,21 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7082fc12-00ec-43ae-a60b-6e1a922e3f08" name="Changes" comment="&quot;new example&quot;">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/pythonProject2_git_demo.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/pythonProject2_git_demo.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_06_2022_16_42.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_06_2022_16_42.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_06_2022_16_42/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_17_06_2022_14_15.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_17_06_2022_14_15.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_17_6_2022_17_15__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_17_6_2022_17_15__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_17_6_2022_17_25__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_17_6_2022_17_25__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_18_06_2022_12_12.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_18_06_2022_12_12.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_18_6_2022_13_10__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_18_6_2022_13_10__Changes_.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TrabajoPractico/import_csv.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_06_2022_16_42.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TrabajoPractico/receta_class.py" beforeDir="false" afterPath="$PROJECT_DIR$/TrabajoPractico/recipe_class.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TrabajoPractico/user_class.py" beforeDir="false" afterPath="$PROJECT_DIR$/TrabajoPractico/user_class.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TrabajoPractico/user_endpoints.py" beforeDir="false" afterPath="$PROJECT_DIR$/TrabajoPractico/user_endpoints.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TrabajoPractico/user_loader.py" beforeDir="false" afterPath="$PROJECT_DIR$/TrabajoPractico/user_loader.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TrabajoPractico/usuarios.json" beforeDir="false" afterPath="$PROJECT_DIR$/TrabajoPractico/usuarios.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,6 +58,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/TrabajoPractico/csv_users.py" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
@@ -82,7 +71,29 @@
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunManager" selected="Flask server.Flask (TrabajoPractico/user_endpoints.py)">
+  <component name="RunManager" selected="Python.import_csv">
+    <configuration name="import_csv" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="pythonProject2_git_demo" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Users\user\AppData\Local\Programs\Python\Python310\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/TrabajoPractico" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\user\Desktop\Martu\UCEMA\2do año\1er cuatri\Fundamentos de Informatica\Trabajo-Practico\TrabajoPractico\import_csv.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="pythonProject2_git_demo" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -192,6 +203,7 @@
       <item itemvalue="Python.user_endpoints" />
       <item itemvalue="Python.menu" />
       <item itemvalue="Python.user_loader" />
+      <item itemvalue="Python.import_csv" />
     </list>
     <recent_temporary>
       <list>
@@ -228,7 +240,8 @@
       <workItem from="1654976182870" duration="5332000" />
       <workItem from="1655494096306" duration="2524000" />
       <workItem from="1655569537432" duration="976000" />
-      <workItem from="1655581723819" duration="3532000" />
+      <workItem from="1655581723819" duration="3963000" />
+      <workItem from="1655730289613" duration="4747000" />
     </task>
     <task id="LOCAL-00001" summary="&quot;new example&quot;">
       <created>1654779352646</created>
@@ -274,11 +287,12 @@
     <option name="LAST_COMMIT_MESSAGE" value="&quot;Avance endpoints&quot;" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/pythonProject2_git_demo$Flask__TrabajoPractico_user_endpoints_py_.coverage" NAME="Flask (TrabajoPractico/user_endpoints.py) Coverage Results" MODIFIED="1655584707148" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/pythonProject2_git_demo$Flask__TrabajoPractico_user_endpoints_py_.coverage" NAME="Flask (TrabajoPractico/user_endpoints.py) Coverage Results" MODIFIED="1655730484876" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/pythonProject2_git_demo$user_endpoints.coverage" NAME="user_endpoints Coverage Results" MODIFIED="1655491371899" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/TrabajoPractico" />
     <SUITE FILE_PATH="coverage/pythonProject2_git_demo$Flask__TrabajoPractico_usuarios_existentes_py_.coverage" NAME="Flask (TrabajoPractico/usuarios_existentes.py) Coverage Results" MODIFIED="1654981584545" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/pythonProject2_git_demo$Menu.coverage" NAME="Menu Coverage Results" MODIFIED="1654552885620" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/CarpetaDemoGit" />
     <SUITE FILE_PATH="coverage/pythonProject2_git_demo$menu.coverage" NAME="menu Coverage Results" MODIFIED="1654977050266" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/CarpetaDemoGit" />
+    <SUITE FILE_PATH="coverage/pythonProject2_git_demo$csv_users.coverage" NAME="import_csv Coverage Results" MODIFIED="1655736149094" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/TrabajoPractico" />
     <SUITE FILE_PATH="coverage/pythonProject2_git_demo$user_loader.coverage" NAME="user_loader Coverage Results" MODIFIED="1655489907608" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/TrabajoPractico" />
     <SUITE FILE_PATH="coverage/pythonProject2_git_demo$main.coverage" NAME="main Coverage Results" MODIFIED="1654786305766" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/pythonProject2_git_demo$usuarios_existentes.coverage" NAME="usuarios_existentes Coverage Results" MODIFIED="1654977290251" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/TrabajoPractico" />
