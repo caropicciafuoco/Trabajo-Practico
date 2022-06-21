@@ -1,0 +1,590 @@
+Index: TrabajoPractico/user_class.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>class Usuario:\r\n    def __init__(self, nombre, contrasena, edad, sexo, peso, altura, intolerancia):\r\n        self.nombre = nombre\r\n        self.contrasena = contrasena\r\n        self.edad = int(edad)\r\n        self.sexo = sexo.upper()\r\n        self.peso = int(peso)\r\n        self.altura = float(altura)\r\n        #self.imc = round(int(self.peso)/int(self.altura)**2, 4)\r\n        self.intolerancia = intolerancia.lower()\r\n\r\n    def __str__(self):\r\n        return f'\\n\\tNombre: {self.nombre}' \\\r\n               f'\\n\\tEdad: {self.edad}' \\\r\n               f'\\n\\tPeso: {self.peso}' \\\r\n               f'\\n\\tAltura: {self.altura}' \\\r\n               f'\\n\\tSexo: {self.sexo}'\\\r\n               f'\\n\\tIntolerancia: {self.intolerancia}'\r\n\r\n    def serialize(self):\r\n        return {\r\n            'nombre': self.nombre,\r\n            \"contrasena\": self.contrasena,\r\n            \"ID\": self.id,\r\n            'edad': self.edad,\r\n            'peso': self.peso,\r\n            'altura': self.altura,\r\n            'sexo': self.sexo,\r\n            \"intolerancia\": self.intolerancia\r\n                } #lo transforma en diccionario para poder pasarlo a json en el \"POST\"\r\n\r\n#f'\\n\\tIMC: {self.imc}'\\\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/TrabajoPractico/user_class.py b/TrabajoPractico/user_class.py
+--- a/TrabajoPractico/user_class.py	(revision 3692d4302d112bd610a9ece862957a9b3869025d)
++++ b/TrabajoPractico/user_class.py	(date 1655498875016)
+@@ -7,7 +7,7 @@
+         self.peso = int(peso)
+         self.altura = float(altura)
+         #self.imc = round(int(self.peso)/int(self.altura)**2, 4)
+-        self.intolerancia = intolerancia.lower()
++        self.intolerancia = intolerancia
+ 
+     def __str__(self):
+         return f'\n\tNombre: {self.nombre}' \
+Index: TrabajoPractico/user_loader.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import json\r\nfrom io import open\r\nfrom user_class import Usuario\r\n\r\ndef load_users():\r\n    users = []\r\n\r\n    with open(\"TrabajoPractico/usuarios.json\", \"r\") as file: #para leer el json\r\n        users_json = json.load(file)\r\n\r\n        for user in users_json:\r\n            new_user = Usuario(\r\n                                user[\"nombre\"],\r\n                                user[\"contrasena\"],\r\n                                user[\"edad\"],\r\n                                user[\"sexo\"],\r\n                                user[\"peso\"],\r\n                                user[\"altura\"],\r\n                                user[\"intolerancia\"]\r\n                                )\r\n\r\n            new_user.id = user[\"ID\"] #crea un nuevo atributo ID\r\n\r\n            users.append(new_user)\r\n\r\n    return users\r\n\r\n\r\n# Para probar si funciona: print(load_users()[2])\r\n#for usuario in load_users():\r\n    #print(usuario)
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/TrabajoPractico/user_loader.py b/TrabajoPractico/user_loader.py
+--- a/TrabajoPractico/user_loader.py	(revision 3692d4302d112bd610a9ece862957a9b3869025d)
++++ b/TrabajoPractico/user_loader.py	(date 1655498846328)
+@@ -1,11 +1,11 @@
+ import json
+ from io import open
+ from user_class import Usuario
+-
++#TrabajoPractico/usuarios.json
+ def load_users():
+     users = []
+ 
+-    with open("TrabajoPractico/usuarios.json", "r") as file: #para leer el json
++    with open("usuarios.json", "r") as file: #para leer el json
+         users_json = json.load(file)
+ 
+         for user in users_json:
+Index: TrabajoPractico/user_endpoints.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from flask import Flask, jsonify, request\r\n\r\nfrom user_loader import load_users\r\nfrom user_class import Usuario\r\n\r\napp = Flask(__name__)\r\nusers = load_users()\r\n\r\n\r\n@app.route(\"/usuarios\", methods=['GET'])\r\ndef usuarios():  # hay que poner nombres diferentes en las funciones\r\n    return jsonify([user.serialize() for user in users])\r\n    # return jsonify({\"Usuarios\": users})\r\n\r\n\r\n@app.route(\"/info_usuario/<ID>\", methods=['GET'])\r\ndef usuario_get(ID):  # hay que poner nombres diferentes en las funciones\r\n    for u in users:\r\n        if u.id == ID:\r\n            return jsonify({\"Nombre\": u.nombre, #se usa el punto para acceder al objeto\r\n                            \"Sexo\": u.sexo,\r\n                            \"Edad\": u.edad,\r\n                            \"Altura\": u.altura,\r\n                            \"Peso\": u.peso,\r\n                            \"Restriccion Alimenticias\": u.restricciones,\r\n                            \"Status\": \"existente\"}) #se usa jsonify para transformar diccionarios a json y es necesario porque la API solo trabaja con json\r\n\r\n    return jsonify({\"ID buscado\": ID,\r\n                    \"Status\": \"not found\"}) #\r\n\r\n\r\n@app.route(\"/crear_usuario\", methods=['POST'])\r\ndef crear_usario():\r\n    body = request.json #simboliza el body de postman\r\n    nombre = body['nombre']\r\n    contrasena = body['contrasena']\r\n    edad = body['edad']\r\n    sexo = body['sexo']\r\n    peso = body['peso']\r\n    altura = body['altura']\r\n    restricciones_alimenticias = body['restricciones_alimenticias']\r\n\r\n    id = str(int(users[-1].id) + 1) #aca hay que crear la funcion para que cree ID randoms\r\n    #esta funcion sirve para agarrar el ID del usuario anterior y sumarle 1\r\n\r\n    nuevo_usuario = Usuario(nombre, contrasena, edad, sexo, peso, altura, restricciones_alimenticias)\r\n    nuevo_usuario.id = id #le agrego el atributo ID\r\n\r\n    users.append(nuevo_usuario) #agrega el objeto a la lista users\r\n\r\n    return jsonify({'nuevo_usuario': nuevo_usuario.serialize(), 'status': 'creado'}) #devuelve en la API un diccionario que te muestra al nuevo objeto\r\n\r\n\r\n@app.route(\"/eliminar_usuario/<ID>\", methods=['DELETE'])\r\ndef eliminar_usuario(ID):\r\n    for u in users:\r\n        if u.id == ID:\r\n            users.remove(u)\r\n            return jsonify({'Usuario': u.serialize(),\r\n                            'Status': 'eliminado'})\r\n\r\n    return jsonify({'ID buscado': ID,\r\n                    'Status': 'not found'})\r\n\r\n\r\n@app.route(\"/cambiar_peso\", methods=['PUT'])\r\ndef cambiar_peso():\r\n    body = request.json\r\n    ID = body['id']\r\n    nuevo_peso = body['peso']\r\n\r\n    for u in users:\r\n        if u.id == ID:\r\n            u.peso = nuevo_peso\r\n            return jsonify({'Usuario' : u.serialize(),\r\n                            'Nuevo Peso' : u.peso,\r\n                            'Status' : 'peso actualizado'})\r\n\r\n    return jsonify({'ID buscado': ID,\r\n                    'Status': 'not found'})\r\n\r\n@app.route(\"/cambiar_contrasena\", methods=['PUT'])\r\ndef cambiar_contrasena():\r\n    body = request.json\r\n    ID = body['id']\r\n    nueva_contrasena = body['contrasena']\r\n\r\n    for u in users:\r\n        if u.id == ID:\r\n            u.contrasena = nueva_contrasena\r\n            return jsonify({'Usuario' : u.serialize(),\r\n                            'Nueva Contraseña' : nueva_contrasena,\r\n                            'Status' : 'contraseña actualizada'})\r\n\r\n    return jsonify({'ID buscado': ID,\r\n                    'Status': 'not found'})\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/TrabajoPractico/user_endpoints.py b/TrabajoPractico/user_endpoints.py
+--- a/TrabajoPractico/user_endpoints.py	(revision 3692d4302d112bd610a9ece862957a9b3869025d)
++++ b/TrabajoPractico/user_endpoints.py	(date 1655498963836)
+@@ -1,7 +1,9 @@
+ from flask import Flask, jsonify, request
+-
++import requests
+ from user_loader import load_users
+ from user_class import Usuario
++from receta_class import Receta
++
+ 
+ app = Flask(__name__)
+ users = load_users()
+@@ -22,7 +24,7 @@
+                             "Edad": u.edad,
+                             "Altura": u.altura,
+                             "Peso": u.peso,
+-                            "Restriccion Alimenticias": u.restricciones,
++                            "Intolerancia": u.intolerancia,
+                             "Status": "existente"}) #se usa jsonify para transformar diccionarios a json y es necesario porque la API solo trabaja con json
+ 
+     return jsonify({"ID buscado": ID,
+@@ -38,12 +40,12 @@
+     sexo = body['sexo']
+     peso = body['peso']
+     altura = body['altura']
+-    restricciones_alimenticias = body['restricciones_alimenticias']
++    intolerancia = body['intolerancia']
+ 
+     id = str(int(users[-1].id) + 1) #aca hay que crear la funcion para que cree ID randoms
+     #esta funcion sirve para agarrar el ID del usuario anterior y sumarle 1
+ 
+-    nuevo_usuario = Usuario(nombre, contrasena, edad, sexo, peso, altura, restricciones_alimenticias)
++    nuevo_usuario = Usuario(nombre, contrasena, edad, sexo, peso, altura, intolerancia)
+     nuevo_usuario.id = id #le agrego el atributo ID
+ 
+     users.append(nuevo_usuario) #agrega el objeto a la lista users
+@@ -94,3 +96,30 @@
+ 
+     return jsonify({'ID buscado': ID,
+                     'Status': 'not found'})
++
++@app.route("/obtener_receta/<ID>", methods=['GET'])
++def obtener_receta(ID):
++    for u in users:
++        if u.id == ID:
++            lista_intolerancia = u.intolerancia
++            parametro_intolerancia = ""
++
++            for intolerancia in lista_intolerancia:
++                if parametro_intolerancia == "":
++                    parametro_intolerancia += intolerancia
++                else:
++                    parametro_intolerancia += ",+" + intolerancia
++
++    url_recetas = 'https://api.spoonacular.com/recipes/complexSearch'
++    http_rectas = (requests.get(url_recetas, params={'apiKey': 'bebbf46b8c6c4453b8b051dfca6f3f73', 'intolerance': parametro_intolerancia})).json()
++
++    lista_recetas = []
++
++    for r in http_rectas['results']:
++        receta = Receta(r['title'], r['id'])
++        lista_recetas.append(receta)
++
++    for r in lista_recetas:
++        return r
++
++
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_17_6_2022_17_15__Changes_.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Update_at_17_6_2022_17_15__Changes_.xml b/.idea/shelf/Uncommitted_changes_before_Update_at_17_6_2022_17_15__Changes_.xml
+new file mode 100644
+--- /dev/null	(date 1655568565827)
++++ b/.idea/shelf/Uncommitted_changes_before_Update_at_17_6_2022_17_15__Changes_.xml	(date 1655568565827)
+@@ -0,0 +1,4 @@
++<changelist name="Uncommitted_changes_before_Update_at_17_6_2022_17_15_[Changes]" date="1655496922006" recycled="true" deleted="true">
++  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_17_6_2022_17_15_[Changes]/shelved.patch" />
++  <option name="DESCRIPTION" value="Uncommitted changes before Update at 17/6/2022 17:15 [Changes]" />
++</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_17_6_2022_17_15_[Changes]/shelved.patch
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Update_at_17_6_2022_17_15_[Changes]/shelved.patch b/.idea/shelf/Uncommitted_changes_before_Update_at_17_6_2022_17_15_[Changes]/shelved.patch
+new file mode 100644
+--- /dev/null	(date 1655496908958)
++++ b/.idea/shelf/Uncommitted_changes_before_Update_at_17_6_2022_17_15_[Changes]/shelved.patch	(date 1655496908958)
+@@ -0,0 +1,56 @@
++Index: .idea/workspace.xml
++IDEA additional info:
++Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
++<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"7082fc12-00ec-43ae-a60b-6e1a922e3f08\" name=\"Changes\" comment=\"\">\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/CarpetaDemoGit\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/CarpetaDemoGit\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/CarpetaDemoGit/ejercicio_1.json\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/CarpetaDemoGit/ejercicio_1.json\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/CarpetaDemoGit/ejercicio_1.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/CarpetaDemoGit/ejercicio_1.py\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/TrabajoPractico/usuario.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/TrabajoPractico/usuario.py\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/main.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/TrabajoPractico/main.py\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Python Script\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitSEFilterConfiguration\">\r\n    <file-type-list>\r\n      <filtered-out-file-type name=\"LOCAL_BRANCH\" />\r\n      <filtered-out-file-type name=\"REMOTE_BRANCH\" />\r\n      <filtered-out-file-type name=\"TAG\" />\r\n      <filtered-out-file-type name=\"COMMIT_BY_MESSAGE\" />\r\n    </file-type-list>\r\n  </component>\r\n  <component name=\"MarkdownSettingsMigration\">\r\n    <option name=\"stateVersion\" value=\"1\" />\r\n  </component>\r\n  <component name=\"ProjectId\" id=\"29cGeJZWeGBGwk9nxEXVjfqrWLf\" />\r\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\">\r\n    <property name=\"ChangesTree.GroupingKeys\" value=\"\" />\r\n    <property name=\"GitStage.ChangesTree.GroupingKeys\" value=\"directory&#10;module&#10;repository\" />\r\n    <property name=\"RunOnceActivity.OpenProjectViewOnStart\" value=\"true\" />\r\n    <property name=\"RunOnceActivity.ShowReadmeOnStart\" value=\"true\" />\r\n    <property name=\"WebServerToolWindowFactoryState\" value=\"false\" />\r\n    <property name=\"node.js.detected.package.eslint\" value=\"true\" />\r\n    <property name=\"node.js.detected.package.tslint\" value=\"true\" />\r\n    <property name=\"node.js.selected.package.eslint\" value=\"(autodetect)\" />\r\n    <property name=\"node.js.selected.package.tslint\" value=\"(autodetect)\" />\r\n    <property name=\"settings.editor.selected.configurable\" value=\"com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable\" />\r\n  </component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"MoveFile.RECENT_KEYS\">\r\n      <recent name=\"$PROJECT_DIR$/TrabajoPractico\" />\r\n      <recent name=\"$PROJECT_DIR$\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"RunManager\" selected=\"Flask server.Flask (TrabajoPractico/usuarios_existentes.py)\">\r\n    <configuration name=\"main\" type=\"PythonConfigurationType\" factoryName=\"Python\" nameIsGenerated=\"true\">\r\n      <module name=\"pythonProject2_git_demo\" />\r\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\r\n      <option name=\"PARENT_ENVS\" value=\"true\" />\r\n      <envs>\r\n        <env name=\"PYTHONUNBUFFERED\" value=\"1\" />\r\n      </envs>\r\n      <option name=\"SDK_HOME\" value=\"\" />\r\n      <option name=\"WORKING_DIRECTORY\" value=\"$PROJECT_DIR$\" />\r\n      <option name=\"IS_MODULE_SDK\" value=\"true\" />\r\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\r\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\r\n      <EXTENSION ID=\"PythonCoverageRunConfigurationExtension\" runner=\"coverage.py\" />\r\n      <option name=\"SCRIPT_NAME\" value=\"$PROJECT_DIR$/TrabajoPractico/main.py\" />\r\n      <option name=\"PARAMETERS\" value=\"\" />\r\n      <option name=\"SHOW_COMMAND_LINE\" value=\"false\" />\r\n      <option name=\"EMULATE_TERMINAL\" value=\"false\" />\r\n      <option name=\"MODULE_MODE\" value=\"false\" />\r\n      <option name=\"REDIRECT_INPUT\" value=\"false\" />\r\n      <option name=\"INPUT_FILE\" value=\"\" />\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <configuration name=\"menu\" type=\"PythonConfigurationType\" factoryName=\"Python\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <module name=\"pythonProject2_git_demo\" />\r\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\r\n      <option name=\"PARENT_ENVS\" value=\"true\" />\r\n      <envs>\r\n        <env name=\"PYTHONUNBUFFERED\" value=\"1\" />\r\n      </envs>\r\n      <option name=\"SDK_HOME\" value=\"\" />\r\n      <option name=\"WORKING_DIRECTORY\" value=\"$PROJECT_DIR$/CarpetaDemoGit\" />\r\n      <option name=\"IS_MODULE_SDK\" value=\"true\" />\r\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\r\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\r\n      <EXTENSION ID=\"PythonCoverageRunConfigurationExtension\" runner=\"coverage.py\" />\r\n      <option name=\"SCRIPT_NAME\" value=\"$PROJECT_DIR$/TrabajoPractico/menu.py\" />\r\n      <option name=\"PARAMETERS\" value=\"\" />\r\n      <option name=\"SHOW_COMMAND_LINE\" value=\"false\" />\r\n      <option name=\"EMULATE_TERMINAL\" value=\"false\" />\r\n      <option name=\"MODULE_MODE\" value=\"false\" />\r\n      <option name=\"REDIRECT_INPUT\" value=\"false\" />\r\n      <option name=\"INPUT_FILE\" value=\"\" />\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <configuration name=\"usuarios_existentes\" type=\"PythonConfigurationType\" factoryName=\"Python\" nameIsGenerated=\"true\">\r\n      <module name=\"pythonProject2_git_demo\" />\r\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\r\n      <option name=\"PARENT_ENVS\" value=\"true\" />\r\n      <envs>\r\n        <env name=\"PYTHONUNBUFFERED\" value=\"1\" />\r\n      </envs>\r\n      <option name=\"SDK_HOME\" value=\"\" />\r\n      <option name=\"WORKING_DIRECTORY\" value=\"$PROJECT_DIR$/TrabajoPractico\" />\r\n      <option name=\"IS_MODULE_SDK\" value=\"true\" />\r\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\r\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\r\n      <EXTENSION ID=\"PythonCoverageRunConfigurationExtension\" runner=\"coverage.py\" />\r\n      <option name=\"SCRIPT_NAME\" value=\"$PROJECT_DIR$/TrabajoPractico/usuarios_existentes.py\" />\r\n      <option name=\"PARAMETERS\" value=\"\" />\r\n      <option name=\"SHOW_COMMAND_LINE\" value=\"false\" />\r\n      <option name=\"EMULATE_TERMINAL\" value=\"false\" />\r\n      <option name=\"MODULE_MODE\" value=\"false\" />\r\n      <option name=\"REDIRECT_INPUT\" value=\"false\" />\r\n      <option name=\"INPUT_FILE\" value=\"\" />\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <configuration name=\"Flask (TrabajoPractico/usuarios_existentes.py)\" type=\"Python.FlaskServer\" nameIsGenerated=\"true\">\r\n      <module name=\"pythonProject2_git_demo\" />\r\n      <option name=\"target\" value=\"$PROJECT_DIR$/TrabajoPractico/usuarios_existentes.py\" />\r\n      <option name=\"targetType\" value=\"PATH\" />\r\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\r\n      <option name=\"PARENT_ENVS\" value=\"true\" />\r\n      <option name=\"SDK_HOME\" value=\"$PROJECT_DIR$/venv/bin/python\" />\r\n      <option name=\"WORKING_DIRECTORY\" value=\"\" />\r\n      <option name=\"IS_MODULE_SDK\" value=\"false\" />\r\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\r\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\r\n      <EXTENSION ID=\"PythonCoverageRunConfigurationExtension\" runner=\"coverage.py\" />\r\n      <option name=\"launchJavascriptDebuger\" value=\"false\" />\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <list>\r\n      <item itemvalue=\"Flask server.Flask (TrabajoPractico/usuarios_existentes.py)\" />\r\n      <item itemvalue=\"Python.main\" />\r\n      <item itemvalue=\"Python.usuarios_existentes\" />\r\n      <item itemvalue=\"Python.menu\" />\r\n    </list>\r\n    <recent_temporary>\r\n      <list>\r\n        <item itemvalue=\"Python.menu\" />\r\n      </list>\r\n    </recent_temporary>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"7082fc12-00ec-43ae-a60b-6e1a922e3f08\" name=\"Changes\" comment=\"\" />\r\n      <created>1653405054220</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1653405054220</updated>\r\n      <workItem from=\"1653405058256\" duration=\"14000\" />\r\n      <workItem from=\"1653405116707\" duration=\"7000\" />\r\n      <workItem from=\"1653405138973\" duration=\"36000\" />\r\n      <workItem from=\"1653405344995\" duration=\"33000\" />\r\n      <workItem from=\"1654015184024\" duration=\"883000\" />\r\n      <workItem from=\"1654545521866\" duration=\"6829000\" />\r\n      <workItem from=\"1654558282953\" duration=\"2113000\" />\r\n      <workItem from=\"1654617774783\" duration=\"481000\" />\r\n      <workItem from=\"1654637681309\" duration=\"6122000\" />\r\n      <workItem from=\"1654690389411\" duration=\"288000\" />\r\n      <workItem from=\"1654778242482\" duration=\"32000\" />\r\n      <workItem from=\"1654778316675\" duration=\"248000\" />\r\n      <workItem from=\"1654778571146\" duration=\"90000\" />\r\n      <workItem from=\"1654779239746\" duration=\"418000\" />\r\n      <workItem from=\"1654786099856\" duration=\"1010000\" />\r\n      <workItem from=\"1654970938254\" duration=\"855000\" />\r\n      <workItem from=\"1654972684648\" duration=\"2826000\" />\r\n      <workItem from=\"1654976182870\" duration=\"5332000\" />\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"&quot;new example&quot;\">\r\n      <created>1654779352646</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1654779352646</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00002\" summary=\"&quot;new example&quot;\">\r\n      <created>1654786180948</created>\r\n      <option name=\"number\" value=\"00002\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1654786180948</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"3\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State />\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"&quot;new example&quot;\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"&quot;new example&quot;\" />\r\n  </component>\r\n  <component name=\"com.intellij.coverage.CoverageDataManagerImpl\">\r\n    <SUITE FILE_PATH=\"coverage/pythonProject2_git_demo$menu.coverage\" NAME=\"menu Coverage Results\" MODIFIED=\"1654977050266\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"true\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$/CarpetaDemoGit\" />\r\n    <SUITE FILE_PATH=\"coverage/pythonProject2_git_demo$Flask__TrabajoPractico_usuarios_existentes_py_.coverage\" NAME=\"Flask (TrabajoPractico/usuarios_existentes.py) Coverage Results\" MODIFIED=\"1654981584545\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"true\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"\" />\r\n    <SUITE FILE_PATH=\"coverage/pythonProject2_git_demo$usuarios_existentes.coverage\" NAME=\"usuarios_existentes Coverage Results\" MODIFIED=\"1654977290251\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"true\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$/TrabajoPractico\" />\r\n    <SUITE FILE_PATH=\"coverage/pythonProject2_git_demo$main.coverage\" NAME=\"main Coverage Results\" MODIFIED=\"1654786305766\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"true\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$\" />\r\n    <SUITE FILE_PATH=\"coverage/pythonProject2_git_demo$Menu.coverage\" NAME=\"Menu Coverage Results\" MODIFIED=\"1654552885620\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"true\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$/CarpetaDemoGit\" />\r\n  </component>\r\n</project>
++Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
++<+>UTF-8
++===================================================================
++diff --git a/.idea/workspace.xml b/.idea/workspace.xml
++--- a/.idea/workspace.xml	(revision bbac774012c7bedf955e1d4931f8d34cac000479)
+++++ b/.idea/workspace.xml	(date 1655496782827)
++@@ -4,13 +4,9 @@
++     <option name="autoReloadType" value="SELECTIVE" />
++   </component>
++   <component name="ChangeListManager">
++-    <list default="true" id="7082fc12-00ec-43ae-a60b-6e1a922e3f08" name="Changes" comment="">
+++    <list default="true" id="7082fc12-00ec-43ae-a60b-6e1a922e3f08" name="Changes" comment="&quot;new example&quot;">
+++      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_06_2022_16_42.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_06_2022_16_42.xml" afterDir="false" />
++       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++-      <change beforePath="$PROJECT_DIR$/CarpetaDemoGit" beforeDir="false" afterPath="$PROJECT_DIR$/CarpetaDemoGit" afterDir="false" />
++-      <change beforePath="$PROJECT_DIR$/CarpetaDemoGit/ejercicio_1.json" beforeDir="false" afterPath="$PROJECT_DIR$/CarpetaDemoGit/ejercicio_1.json" afterDir="false" />
++-      <change beforePath="$PROJECT_DIR$/CarpetaDemoGit/ejercicio_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/CarpetaDemoGit/ejercicio_1.py" afterDir="false" />
++-      <change beforePath="$PROJECT_DIR$/TrabajoPractico/usuario.py" beforeDir="false" afterPath="$PROJECT_DIR$/TrabajoPractico/usuario.py" afterDir="false" />
++-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/TrabajoPractico/main.py" afterDir="false" />
++     </list>
++     <option name="SHOW_DIALOG" value="false" />
++     <option name="HIGHLIGHT_CONFLICTS" value="true" />
++@@ -50,6 +46,7 @@
++     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
++     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
++     <property name="WebServerToolWindowFactoryState" value="false" />
+++    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
++     <property name="node.js.detected.package.eslint" value="true" />
++     <property name="node.js.detected.package.tslint" value="true" />
++     <property name="node.js.selected.package.eslint" value="(autodetect)" />
++@@ -182,6 +179,7 @@
++       <workItem from="1654970938254" duration="855000" />
++       <workItem from="1654972684648" duration="2826000" />
++       <workItem from="1654976182870" duration="5332000" />
+++      <workItem from="1655129637895" duration="910000" />
++     </task>
++     <task id="LOCAL-00001" summary="&quot;new example&quot;">
++       <created>1654779352646</created>
++@@ -219,10 +217,10 @@
++     <option name="LAST_COMMIT_MESSAGE" value="&quot;new example&quot;" />
++   </component>
++   <component name="com.intellij.coverage.CoverageDataManagerImpl">
++-    <SUITE FILE_PATH="coverage/pythonProject2_git_demo$menu.coverage" NAME="menu Coverage Results" MODIFIED="1654977050266" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/CarpetaDemoGit" />
++-    <SUITE FILE_PATH="coverage/pythonProject2_git_demo$Flask__TrabajoPractico_usuarios_existentes_py_.coverage" NAME="Flask (TrabajoPractico/usuarios_existentes.py) Coverage Results" MODIFIED="1654981584545" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
++     <SUITE FILE_PATH="coverage/pythonProject2_git_demo$usuarios_existentes.coverage" NAME="usuarios_existentes Coverage Results" MODIFIED="1654977290251" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/TrabajoPractico" />
++     <SUITE FILE_PATH="coverage/pythonProject2_git_demo$main.coverage" NAME="main Coverage Results" MODIFIED="1654786305766" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+++    <SUITE FILE_PATH="coverage/pythonProject2_git_demo$Flask__TrabajoPractico_usuarios_existentes_py_.coverage" NAME="Flask (TrabajoPractico/usuarios_existentes.py) Coverage Results" MODIFIED="1654981584545" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
++     <SUITE FILE_PATH="coverage/pythonProject2_git_demo$Menu.coverage" NAME="Menu Coverage Results" MODIFIED="1654552885620" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/CarpetaDemoGit" />
+++    <SUITE FILE_PATH="coverage/pythonProject2_git_demo$menu.coverage" NAME="menu Coverage Results" MODIFIED="1654977050266" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/CarpetaDemoGit" />
++   </component>
++ </project>
++\ No newline at end of file
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ProjectRootManager\" version=\"2\" project-jdk-name=\"Python 3.10 (pythonProject2) (2)\" project-jdk-type=\"Python SDK\" />\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	(revision 3692d4302d112bd610a9ece862957a9b3869025d)
++++ b/.idea/misc.xml	(date 1655498761270)
+@@ -1,4 +1,4 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.10 (pythonProject2) (2)" project-jdk-type="Python SDK" />
++  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.9 (Trabajo-Practico)" project-jdk-type="Python SDK" />
+ </project>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_17_6_2022_17_25__Changes_.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Update_at_17_6_2022_17_25__Changes_.xml b/.idea/shelf/Uncommitted_changes_before_Update_at_17_6_2022_17_25__Changes_.xml
+new file mode 100644
+--- /dev/null	(date 1655568565833)
++++ b/.idea/shelf/Uncommitted_changes_before_Update_at_17_6_2022_17_25__Changes_.xml	(date 1655568565833)
+@@ -0,0 +1,4 @@
++<changelist name="Uncommitted_changes_before_Update_at_17_6_2022_17_25_[Changes]" date="1655497513868" recycled="true" deleted="true">
++  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_17_6_2022_17_25_[Changes]/shelved.patch" />
++  <option name="DESCRIPTION" value="Uncommitted changes before Update at 17/6/2022 17:25 [Changes]" />
++</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_17_6_2022_17_25_[Changes]/shelved.patch
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Update_at_17_6_2022_17_25_[Changes]/shelved.patch b/.idea/shelf/Uncommitted_changes_before_Update_at_17_6_2022_17_25_[Changes]/shelved.patch
+new file mode 100644
+--- /dev/null	(date 1655497505739)
++++ b/.idea/shelf/Uncommitted_changes_before_Update_at_17_6_2022_17_25_[Changes]/shelved.patch	(date 1655497505739)
+@@ -0,0 +1,112 @@
++Index: .idea/workspace.xml
++IDEA additional info:
++Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
++<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"7082fc12-00ec-43ae-a60b-6e1a922e3f08\" name=\"Changes\" comment=\"\">\r\n      <change afterPath=\"$PROJECT_DIR$/TrabajoPractico/User_loader.py\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/TrabajoPractico/usuarios.json\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_06_2022_16_42.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_06_2022_16_42.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/TrabajoPractico/usuario.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/TrabajoPractico/usuario.py\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/TrabajoPractico/usuarios_existentes.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/TrabajoPractico/usuarios_existentes.py\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Python Script\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitSEFilterConfiguration\">\r\n    <file-type-list>\r\n      <filtered-out-file-type name=\"LOCAL_BRANCH\" />\r\n      <filtered-out-file-type name=\"REMOTE_BRANCH\" />\r\n      <filtered-out-file-type name=\"TAG\" />\r\n      <filtered-out-file-type name=\"COMMIT_BY_MESSAGE\" />\r\n    </file-type-list>\r\n  </component>\r\n  <component name=\"MarkdownSettingsMigration\">\r\n    <option name=\"stateVersion\" value=\"1\" />\r\n  </component>\r\n  <component name=\"ProjectId\" id=\"29cGeJZWeGBGwk9nxEXVjfqrWLf\" />\r\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\">\r\n    <property name=\"ChangesTree.GroupingKeys\" value=\"\" />\r\n    <property name=\"GitStage.ChangesTree.GroupingKeys\" value=\"directory&#10;module&#10;repository\" />\r\n    <property name=\"RunOnceActivity.OpenProjectViewOnStart\" value=\"true\" />\r\n    <property name=\"RunOnceActivity.ShowReadmeOnStart\" value=\"true\" />\r\n    <property name=\"WebServerToolWindowFactoryState\" value=\"false\" />\r\n    <property name=\"last_opened_file_path\" value=\"$PROJECT_DIR$/TrabajoPractico/User_loader.py\" />\r\n    <property name=\"node.js.detected.package.eslint\" value=\"true\" />\r\n    <property name=\"node.js.detected.package.tslint\" value=\"true\" />\r\n    <property name=\"node.js.selected.package.eslint\" value=\"(autodetect)\" />\r\n    <property name=\"node.js.selected.package.tslint\" value=\"(autodetect)\" />\r\n    <property name=\"settings.editor.selected.configurable\" value=\"preferences.lookFeel\" />\r\n  </component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"MoveFile.RECENT_KEYS\">\r\n      <recent name=\"$PROJECT_DIR$/TrabajoPractico\" />\r\n      <recent name=\"$PROJECT_DIR$\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"RunManager\" selected=\"Flask server.Flask (TrabajoPractico/usuarios_existentes.py)\">\r\n    <configuration name=\"User_loader\" type=\"PythonConfigurationType\" factoryName=\"Python\" nameIsGenerated=\"true\">\r\n      <module name=\"pythonProject2_git_demo\" />\r\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\r\n      <option name=\"PARENT_ENVS\" value=\"true\" />\r\n      <envs>\r\n        <env name=\"PYTHONUNBUFFERED\" value=\"1\" />\r\n      </envs>\r\n      <option name=\"SDK_HOME\" value=\"C:\\Users\\user\\Desktop\\Martu\\UCEMA\\2do año\\1er cuatri\\Fundamentos de Informatica\\Practica\\Unidad_5\\venv\\interpreter\\Scripts\\python.exe\" />\r\n      <option name=\"WORKING_DIRECTORY\" value=\"$PROJECT_DIR$/TrabajoPractico\" />\r\n      <option name=\"IS_MODULE_SDK\" value=\"false\" />\r\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\r\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\r\n      <EXTENSION ID=\"PythonCoverageRunConfigurationExtension\" runner=\"coverage.py\" />\r\n      <option name=\"SCRIPT_NAME\" value=\"$PROJECT_DIR$/TrabajoPractico/User_loader.py\" />\r\n      <option name=\"PARAMETERS\" value=\"\" />\r\n      <option name=\"SHOW_COMMAND_LINE\" value=\"false\" />\r\n      <option name=\"EMULATE_TERMINAL\" value=\"false\" />\r\n      <option name=\"MODULE_MODE\" value=\"false\" />\r\n      <option name=\"REDIRECT_INPUT\" value=\"false\" />\r\n      <option name=\"INPUT_FILE\" value=\"\" />\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <configuration name=\"main\" type=\"PythonConfigurationType\" factoryName=\"Python\" nameIsGenerated=\"true\">\r\n      <module name=\"pythonProject2_git_demo\" />\r\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\r\n      <option name=\"PARENT_ENVS\" value=\"true\" />\r\n      <envs>\r\n        <env name=\"PYTHONUNBUFFERED\" value=\"1\" />\r\n      </envs>\r\n      <option name=\"SDK_HOME\" value=\"\" />\r\n      <option name=\"WORKING_DIRECTORY\" value=\"$PROJECT_DIR$\" />\r\n      <option name=\"IS_MODULE_SDK\" value=\"true\" />\r\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\r\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\r\n      <EXTENSION ID=\"PythonCoverageRunConfigurationExtension\" runner=\"coverage.py\" />\r\n      <option name=\"SCRIPT_NAME\" value=\"$PROJECT_DIR$/TrabajoPractico/main.py\" />\r\n      <option name=\"PARAMETERS\" value=\"\" />\r\n      <option name=\"SHOW_COMMAND_LINE\" value=\"false\" />\r\n      <option name=\"EMULATE_TERMINAL\" value=\"false\" />\r\n      <option name=\"MODULE_MODE\" value=\"false\" />\r\n      <option name=\"REDIRECT_INPUT\" value=\"false\" />\r\n      <option name=\"INPUT_FILE\" value=\"\" />\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <configuration name=\"menu\" type=\"PythonConfigurationType\" factoryName=\"Python\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <module name=\"pythonProject2_git_demo\" />\r\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\r\n      <option name=\"PARENT_ENVS\" value=\"true\" />\r\n      <envs>\r\n        <env name=\"PYTHONUNBUFFERED\" value=\"1\" />\r\n      </envs>\r\n      <option name=\"SDK_HOME\" value=\"\" />\r\n      <option name=\"WORKING_DIRECTORY\" value=\"$PROJECT_DIR$/CarpetaDemoGit\" />\r\n      <option name=\"IS_MODULE_SDK\" value=\"true\" />\r\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\r\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\r\n      <EXTENSION ID=\"PythonCoverageRunConfigurationExtension\" runner=\"coverage.py\" />\r\n      <option name=\"SCRIPT_NAME\" value=\"$PROJECT_DIR$/TrabajoPractico/menu.py\" />\r\n      <option name=\"PARAMETERS\" value=\"\" />\r\n      <option name=\"SHOW_COMMAND_LINE\" value=\"false\" />\r\n      <option name=\"EMULATE_TERMINAL\" value=\"false\" />\r\n      <option name=\"MODULE_MODE\" value=\"false\" />\r\n      <option name=\"REDIRECT_INPUT\" value=\"false\" />\r\n      <option name=\"INPUT_FILE\" value=\"\" />\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <configuration name=\"usuarios_existentes\" type=\"PythonConfigurationType\" factoryName=\"Python\" nameIsGenerated=\"true\">\r\n      <module name=\"pythonProject2_git_demo\" />\r\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\r\n      <option name=\"PARENT_ENVS\" value=\"true\" />\r\n      <envs>\r\n        <env name=\"PYTHONUNBUFFERED\" value=\"1\" />\r\n      </envs>\r\n      <option name=\"SDK_HOME\" value=\"\" />\r\n      <option name=\"WORKING_DIRECTORY\" value=\"$PROJECT_DIR$/TrabajoPractico\" />\r\n      <option name=\"IS_MODULE_SDK\" value=\"true\" />\r\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\r\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\r\n      <EXTENSION ID=\"PythonCoverageRunConfigurationExtension\" runner=\"coverage.py\" />\r\n      <option name=\"SCRIPT_NAME\" value=\"$PROJECT_DIR$/TrabajoPractico/usuarios_existentes.py\" />\r\n      <option name=\"PARAMETERS\" value=\"\" />\r\n      <option name=\"SHOW_COMMAND_LINE\" value=\"false\" />\r\n      <option name=\"EMULATE_TERMINAL\" value=\"false\" />\r\n      <option name=\"MODULE_MODE\" value=\"false\" />\r\n      <option name=\"REDIRECT_INPUT\" value=\"false\" />\r\n      <option name=\"INPUT_FILE\" value=\"\" />\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <configuration name=\"Flask (TrabajoPractico/usuarios_existentes.py)\" type=\"Python.FlaskServer\" nameIsGenerated=\"true\">\r\n      <module name=\"pythonProject2_git_demo\" />\r\n      <option name=\"target\" value=\"$PROJECT_DIR$/TrabajoPractico/usuarios_existentes.py\" />\r\n      <option name=\"targetType\" value=\"PATH\" />\r\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\r\n      <option name=\"PARENT_ENVS\" value=\"true\" />\r\n      <option name=\"SDK_HOME\" value=\"C:\\Users\\user\\Desktop\\Martu\\UCEMA\\2do año\\1er cuatri\\Fundamentos de Informatica\\Clases_Teoricas\\venv\\interpreter\\Scripts\\python.exe\" />\r\n      <option name=\"WORKING_DIRECTORY\" value=\"$PROJECT_DIR$\" />\r\n      <option name=\"IS_MODULE_SDK\" value=\"false\" />\r\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\r\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\r\n      <EXTENSION ID=\"PythonCoverageRunConfigurationExtension\" runner=\"coverage.py\" />\r\n      <option name=\"launchJavascriptDebuger\" value=\"false\" />\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <list>\r\n      <item itemvalue=\"Flask server.Flask (TrabajoPractico/usuarios_existentes.py)\" />\r\n      <item itemvalue=\"Python.User_loader\" />\r\n      <item itemvalue=\"Python.main\" />\r\n      <item itemvalue=\"Python.usuarios_existentes\" />\r\n      <item itemvalue=\"Python.menu\" />\r\n    </list>\r\n    <recent_temporary>\r\n      <list>\r\n        <item itemvalue=\"Python.menu\" />\r\n      </list>\r\n    </recent_temporary>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"7082fc12-00ec-43ae-a60b-6e1a922e3f08\" name=\"Changes\" comment=\"\" />\r\n      <created>1653405054220</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1653405054220</updated>\r\n      <workItem from=\"1653405058256\" duration=\"14000\" />\r\n      <workItem from=\"1653405116707\" duration=\"7000\" />\r\n      <workItem from=\"1653405138973\" duration=\"36000\" />\r\n      <workItem from=\"1653405344995\" duration=\"33000\" />\r\n      <workItem from=\"1654015184024\" duration=\"883000\" />\r\n      <workItem from=\"1654545521866\" duration=\"6829000\" />\r\n      <workItem from=\"1654558282953\" duration=\"2113000\" />\r\n      <workItem from=\"1654617774783\" duration=\"481000\" />\r\n      <workItem from=\"1654637681309\" duration=\"6122000\" />\r\n      <workItem from=\"1654690389411\" duration=\"288000\" />\r\n      <workItem from=\"1654778242482\" duration=\"32000\" />\r\n      <workItem from=\"1654778316675\" duration=\"248000\" />\r\n      <workItem from=\"1654778571146\" duration=\"90000\" />\r\n      <workItem from=\"1654779239746\" duration=\"418000\" />\r\n      <workItem from=\"1654786099856\" duration=\"1010000\" />\r\n      <workItem from=\"1654970938254\" duration=\"855000\" />\r\n      <workItem from=\"1654972684648\" duration=\"2826000\" />\r\n      <workItem from=\"1654976182870\" duration=\"5332000\" />\r\n      <workItem from=\"1655470499707\" duration=\"4120000\" />\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"&quot;new example&quot;\">\r\n      <created>1654779352646</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1654779352646</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00002\" summary=\"&quot;new example&quot;\">\r\n      <created>1654786180948</created>\r\n      <option name=\"number\" value=\"00002\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1654786180948</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"3\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State />\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"&quot;new example&quot;\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"&quot;new example&quot;\" />\r\n  </component>\r\n  <component name=\"com.intellij.coverage.CoverageDataManagerImpl\">\r\n    <SUITE FILE_PATH=\"coverage/pythonProject2_git_demo$menu.coverage\" NAME=\"menu Coverage Results\" MODIFIED=\"1654977050266\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"true\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$/CarpetaDemoGit\" />\r\n    <SUITE FILE_PATH=\"coverage/pythonProject2_git_demo$Menu.coverage\" NAME=\"Menu Coverage Results\" MODIFIED=\"1654552885620\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"true\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$/CarpetaDemoGit\" />\r\n    <SUITE FILE_PATH=\"coverage/pythonProject2_git_demo$Flask__TrabajoPractico_usuarios_existentes_py_.coverage\" NAME=\"Flask (TrabajoPractico/usuarios_existentes.py) Coverage Results\" MODIFIED=\"1655474698869\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"true\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$\" />\r\n    <SUITE FILE_PATH=\"coverage/pythonProject2_git_demo$main.coverage\" NAME=\"main Coverage Results\" MODIFIED=\"1654786305766\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"true\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$\" />\r\n    <SUITE FILE_PATH=\"coverage/pythonProject2_git_demo$usuarios_existentes.coverage\" NAME=\"usuarios_existentes Coverage Results\" MODIFIED=\"1654977290251\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"true\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$/TrabajoPractico\" />\r\n    <SUITE FILE_PATH=\"coverage/pythonProject2_git_demo$User_loader.coverage\" NAME=\"User_loader Coverage Results\" MODIFIED=\"1655472657360\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"true\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$/TrabajoPractico\" />\r\n  </component>\r\n</project>
++Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
++<+>UTF-8
++===================================================================
++diff --git a/.idea/workspace.xml b/.idea/workspace.xml
++--- a/.idea/workspace.xml	(revision 6c3788787483c24a04f0da63101a35a2b0974cee)
+++++ b/.idea/workspace.xml	(date 1655497030883)
++@@ -4,13 +4,9 @@
++     <option name="autoReloadType" value="SELECTIVE" />
++   </component>
++   <component name="ChangeListManager">
++-    <list default="true" id="7082fc12-00ec-43ae-a60b-6e1a922e3f08" name="Changes" comment="">
++-      <change afterPath="$PROJECT_DIR$/TrabajoPractico/User_loader.py" afterDir="false" />
++-      <change afterPath="$PROJECT_DIR$/TrabajoPractico/usuarios.json" afterDir="false" />
+++    <list default="true" id="7082fc12-00ec-43ae-a60b-6e1a922e3f08" name="Changes" comment="&quot;new example&quot;">
++       <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_06_2022_16_42.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_06_2022_16_42.xml" afterDir="false" />
++       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++-      <change beforePath="$PROJECT_DIR$/TrabajoPractico/usuario.py" beforeDir="false" afterPath="$PROJECT_DIR$/TrabajoPractico/usuario.py" afterDir="false" />
++-      <change beforePath="$PROJECT_DIR$/TrabajoPractico/usuarios_existentes.py" beforeDir="false" afterPath="$PROJECT_DIR$/TrabajoPractico/usuarios_existentes.py" afterDir="false" />
++     </list>
++     <option name="SHOW_DIALOG" value="false" />
++     <option name="HIGHLIGHT_CONFLICTS" value="true" />
++@@ -50,12 +46,11 @@
++     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
++     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
++     <property name="WebServerToolWindowFactoryState" value="false" />
++-    <property name="last_opened_file_path" value="$PROJECT_DIR$/TrabajoPractico/User_loader.py" />
++     <property name="node.js.detected.package.eslint" value="true" />
++     <property name="node.js.detected.package.tslint" value="true" />
++     <property name="node.js.selected.package.eslint" value="(autodetect)" />
++     <property name="node.js.selected.package.tslint" value="(autodetect)" />
++-    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+++    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
++   </component>
++   <component name="RecentsManager">
++     <key name="MoveFile.RECENT_KEYS">
++@@ -64,28 +59,6 @@
++     </key>
++   </component>
++   <component name="RunManager" selected="Flask server.Flask (TrabajoPractico/usuarios_existentes.py)">
++-    <configuration name="User_loader" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
++-      <module name="pythonProject2_git_demo" />
++-      <option name="INTERPRETER_OPTIONS" value="" />
++-      <option name="PARENT_ENVS" value="true" />
++-      <envs>
++-        <env name="PYTHONUNBUFFERED" value="1" />
++-      </envs>
++-      <option name="SDK_HOME" value="C:\Users\user\Desktop\Martu\UCEMA\2do año\1er cuatri\Fundamentos de Informatica\Practica\Unidad_5\venv\interpreter\Scripts\python.exe" />
++-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/TrabajoPractico" />
++-      <option name="IS_MODULE_SDK" value="false" />
++-      <option name="ADD_CONTENT_ROOTS" value="true" />
++-      <option name="ADD_SOURCE_ROOTS" value="true" />
++-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
++-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/TrabajoPractico/User_loader.py" />
++-      <option name="PARAMETERS" value="" />
++-      <option name="SHOW_COMMAND_LINE" value="false" />
++-      <option name="EMULATE_TERMINAL" value="false" />
++-      <option name="MODULE_MODE" value="false" />
++-      <option name="REDIRECT_INPUT" value="false" />
++-      <option name="INPUT_FILE" value="" />
++-      <method v="2" />
++-    </configuration>
++     <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
++       <module name="pythonProject2_git_demo" />
++       <option name="INTERPRETER_OPTIONS" value="" />
++@@ -158,8 +131,8 @@
++       <option name="targetType" value="PATH" />
++       <option name="INTERPRETER_OPTIONS" value="" />
++       <option name="PARENT_ENVS" value="true" />
++-      <option name="SDK_HOME" value="C:\Users\user\Desktop\Martu\UCEMA\2do año\1er cuatri\Fundamentos de Informatica\Clases_Teoricas\venv\interpreter\Scripts\python.exe" />
++-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+++      <option name="SDK_HOME" value="$PROJECT_DIR$/venv/bin/python" />
+++      <option name="WORKING_DIRECTORY" value="" />
++       <option name="IS_MODULE_SDK" value="false" />
++       <option name="ADD_CONTENT_ROOTS" value="true" />
++       <option name="ADD_SOURCE_ROOTS" value="true" />
++@@ -169,7 +142,6 @@
++     </configuration>
++     <list>
++       <item itemvalue="Flask server.Flask (TrabajoPractico/usuarios_existentes.py)" />
++-      <item itemvalue="Python.User_loader" />
++       <item itemvalue="Python.main" />
++       <item itemvalue="Python.usuarios_existentes" />
++       <item itemvalue="Python.menu" />
++@@ -206,7 +178,6 @@
++       <workItem from="1654970938254" duration="855000" />
++       <workItem from="1654972684648" duration="2826000" />
++       <workItem from="1654976182870" duration="5332000" />
++-      <workItem from="1655470499707" duration="4120000" />
++     </task>
++     <task id="LOCAL-00001" summary="&quot;new example&quot;">
++       <created>1654779352646</created>
++@@ -244,11 +215,10 @@
++     <option name="LAST_COMMIT_MESSAGE" value="&quot;new example&quot;" />
++   </component>
++   <component name="com.intellij.coverage.CoverageDataManagerImpl">
++-    <SUITE FILE_PATH="coverage/pythonProject2_git_demo$menu.coverage" NAME="menu Coverage Results" MODIFIED="1654977050266" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/CarpetaDemoGit" />
++-    <SUITE FILE_PATH="coverage/pythonProject2_git_demo$Menu.coverage" NAME="Menu Coverage Results" MODIFIED="1654552885620" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/CarpetaDemoGit" />
++-    <SUITE FILE_PATH="coverage/pythonProject2_git_demo$Flask__TrabajoPractico_usuarios_existentes_py_.coverage" NAME="Flask (TrabajoPractico/usuarios_existentes.py) Coverage Results" MODIFIED="1655474698869" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
++-    <SUITE FILE_PATH="coverage/pythonProject2_git_demo$main.coverage" NAME="main Coverage Results" MODIFIED="1654786305766" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
++     <SUITE FILE_PATH="coverage/pythonProject2_git_demo$usuarios_existentes.coverage" NAME="usuarios_existentes Coverage Results" MODIFIED="1654977290251" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/TrabajoPractico" />
++-    <SUITE FILE_PATH="coverage/pythonProject2_git_demo$User_loader.coverage" NAME="User_loader Coverage Results" MODIFIED="1655472657360" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/TrabajoPractico" />
+++    <SUITE FILE_PATH="coverage/pythonProject2_git_demo$main.coverage" NAME="main Coverage Results" MODIFIED="1654786305766" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+++    <SUITE FILE_PATH="coverage/pythonProject2_git_demo$Flask__TrabajoPractico_usuarios_existentes_py_.coverage" NAME="Flask (TrabajoPractico/usuarios_existentes.py) Coverage Results" MODIFIED="1654981584545" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+++    <SUITE FILE_PATH="coverage/pythonProject2_git_demo$Menu.coverage" NAME="Menu Coverage Results" MODIFIED="1654552885620" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/CarpetaDemoGit" />
+++    <SUITE FILE_PATH="coverage/pythonProject2_git_demo$menu.coverage" NAME="menu Coverage Results" MODIFIED="1654977050266" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/CarpetaDemoGit" />
++   </component>
++ </project>
++\ No newline at end of file
+Index: .idea/pythonProject2_git_demo.iml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<module type=\"PYTHON_MODULE\" version=\"4\">\r\n  <component name=\"NewModuleRootManager\">\r\n    <content url=\"file://$MODULE_DIR$\">\r\n      <excludeFolder url=\"file://$MODULE_DIR$/venv\" />\r\n    </content>\r\n    <orderEntry type=\"inheritedJdk\" />\r\n    <orderEntry type=\"sourceFolder\" forTests=\"false\" />\r\n  </component>\r\n</module>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/pythonProject2_git_demo.iml b/.idea/pythonProject2_git_demo.iml
+--- a/.idea/pythonProject2_git_demo.iml	(revision 3692d4302d112bd610a9ece862957a9b3869025d)
++++ b/.idea/pythonProject2_git_demo.iml	(date 1655498761240)
+@@ -1,10 +1,13 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <module type="PYTHON_MODULE" version="4">
++  <component name="Flask">
++    <option name="enabled" value="false" />
++  </component>
+   <component name="NewModuleRootManager">
+     <content url="file://$MODULE_DIR$">
+       <excludeFolder url="file://$MODULE_DIR$/venv" />
+     </content>
+-    <orderEntry type="inheritedJdk" />
++    <orderEntry type="jdk" jdkName="Python 3.9 (Trabajo-Practico)" jdkType="Python SDK" />
+     <orderEntry type="sourceFolder" forTests="false" />
+   </component>
+ </module>
+\ No newline at end of file
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"7082fc12-00ec-43ae-a60b-6e1a922e3f08\" name=\"Changes\" comment=\"\">\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/TrabajoPractico/User_loader.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/TrabajoPractico/user_loader.py\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/TrabajoPractico/main.py\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/TrabajoPractico/menu.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/TrabajoPractico/menu.py\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/TrabajoPractico/usuario.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/TrabajoPractico/user_class.py\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/TrabajoPractico/usuarios.json\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/TrabajoPractico/usuarios.json\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/TrabajoPractico/usuarios_existentes.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/TrabajoPractico/user_endpoints.py\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Python Script\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"FlaskConsoleOptions\" custom-start-script=\"import sys&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo&#10;locals().update(ScriptInfo(create_app=None).load_app().make_shell_context())&#10;print(&quot;Python %s on %s\\nApp: %s [%s]\\nInstance: %s&quot; % (sys.version, sys.platform, app.import_name, app.env, app.instance_path))\">\r\n    <envs>\r\n      <env key=\"FLASK_APP\" value=\"app\" />\r\n    </envs>\r\n    <option name=\"myCustomStartScript\" value=\"import sys&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo&#10;locals().update(ScriptInfo(create_app=None).load_app().make_shell_context())&#10;print(&quot;Python %s on %s\\nApp: %s [%s]\\nInstance: %s&quot; % (sys.version, sys.platform, app.import_name, app.env, app.instance_path))\" />\r\n    <option name=\"myEnvs\">\r\n      <map>\r\n        <entry key=\"FLASK_APP\" value=\"app\" />\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitSEFilterConfiguration\">\r\n    <file-type-list>\r\n      <filtered-out-file-type name=\"LOCAL_BRANCH\" />\r\n      <filtered-out-file-type name=\"REMOTE_BRANCH\" />\r\n      <filtered-out-file-type name=\"TAG\" />\r\n      <filtered-out-file-type name=\"COMMIT_BY_MESSAGE\" />\r\n    </file-type-list>\r\n  </component>\r\n  <component name=\"MarkdownSettingsMigration\">\r\n    <option name=\"stateVersion\" value=\"1\" />\r\n  </component>\r\n  <component name=\"ProjectId\" id=\"29cGeJZWeGBGwk9nxEXVjfqrWLf\" />\r\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\">\r\n    <property name=\"ChangesTree.GroupingKeys\" value=\"\" />\r\n    <property name=\"GitStage.ChangesTree.GroupingKeys\" value=\"directory&#10;module&#10;repository\" />\r\n    <property name=\"RunOnceActivity.OpenProjectViewOnStart\" value=\"true\" />\r\n    <property name=\"RunOnceActivity.ShowReadmeOnStart\" value=\"true\" />\r\n    <property name=\"WebServerToolWindowFactoryState\" value=\"false\" />\r\n    <property name=\"node.js.detected.package.eslint\" value=\"true\" />\r\n    <property name=\"node.js.detected.package.tslint\" value=\"true\" />\r\n    <property name=\"node.js.selected.package.eslint\" value=\"(autodetect)\" />\r\n    <property name=\"node.js.selected.package.tslint\" value=\"(autodetect)\" />\r\n    <property name=\"settings.editor.selected.configurable\" value=\"preferences.keymap\" />\r\n  </component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"MoveFile.RECENT_KEYS\">\r\n      <recent name=\"$PROJECT_DIR$/TrabajoPractico\" />\r\n      <recent name=\"$PROJECT_DIR$\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"RunManager\" selected=\"Flask server.Flask (TrabajoPractico/user_endpoints.py)\">\r\n    <configuration name=\"main\" type=\"PythonConfigurationType\" factoryName=\"Python\" nameIsGenerated=\"true\">\r\n      <module name=\"pythonProject2_git_demo\" />\r\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\r\n      <option name=\"PARENT_ENVS\" value=\"true\" />\r\n      <envs>\r\n        <env name=\"PYTHONUNBUFFERED\" value=\"1\" />\r\n      </envs>\r\n      <option name=\"SDK_HOME\" value=\"\" />\r\n      <option name=\"WORKING_DIRECTORY\" value=\"$PROJECT_DIR$\" />\r\n      <option name=\"IS_MODULE_SDK\" value=\"true\" />\r\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\r\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\r\n      <EXTENSION ID=\"PythonCoverageRunConfigurationExtension\" runner=\"coverage.py\" />\r\n      <option name=\"SCRIPT_NAME\" value=\"$PROJECT_DIR$/TrabajoPractico/main.py\" />\r\n      <option name=\"PARAMETERS\" value=\"\" />\r\n      <option name=\"SHOW_COMMAND_LINE\" value=\"false\" />\r\n      <option name=\"EMULATE_TERMINAL\" value=\"false\" />\r\n      <option name=\"MODULE_MODE\" value=\"false\" />\r\n      <option name=\"REDIRECT_INPUT\" value=\"false\" />\r\n      <option name=\"INPUT_FILE\" value=\"\" />\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <configuration name=\"menu\" type=\"PythonConfigurationType\" factoryName=\"Python\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <module name=\"pythonProject2_git_demo\" />\r\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\r\n      <option name=\"PARENT_ENVS\" value=\"true\" />\r\n      <envs>\r\n        <env name=\"PYTHONUNBUFFERED\" value=\"1\" />\r\n      </envs>\r\n      <option name=\"SDK_HOME\" value=\"\" />\r\n      <option name=\"WORKING_DIRECTORY\" value=\"$PROJECT_DIR$/CarpetaDemoGit\" />\r\n      <option name=\"IS_MODULE_SDK\" value=\"true\" />\r\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\r\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\r\n      <EXTENSION ID=\"PythonCoverageRunConfigurationExtension\" runner=\"coverage.py\" />\r\n      <option name=\"SCRIPT_NAME\" value=\"$PROJECT_DIR$/TrabajoPractico/menu.py\" />\r\n      <option name=\"PARAMETERS\" value=\"\" />\r\n      <option name=\"SHOW_COMMAND_LINE\" value=\"false\" />\r\n      <option name=\"EMULATE_TERMINAL\" value=\"false\" />\r\n      <option name=\"MODULE_MODE\" value=\"false\" />\r\n      <option name=\"REDIRECT_INPUT\" value=\"false\" />\r\n      <option name=\"INPUT_FILE\" value=\"\" />\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <configuration name=\"user_endpoints\" type=\"PythonConfigurationType\" factoryName=\"Python\" nameIsGenerated=\"true\">\r\n      <module name=\"pythonProject2_git_demo\" />\r\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\r\n      <option name=\"PARENT_ENVS\" value=\"true\" />\r\n      <envs>\r\n        <env name=\"PYTHONUNBUFFERED\" value=\"1\" />\r\n      </envs>\r\n      <option name=\"SDK_HOME\" value=\"\" />\r\n      <option name=\"WORKING_DIRECTORY\" value=\"$PROJECT_DIR$/TrabajoPractico\" />\r\n      <option name=\"IS_MODULE_SDK\" value=\"true\" />\r\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\r\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\r\n      <EXTENSION ID=\"PythonCoverageRunConfigurationExtension\" runner=\"coverage.py\" />\r\n      <option name=\"SCRIPT_NAME\" value=\"$PROJECT_DIR$/TrabajoPractico/user_endpoints.py\" />\r\n      <option name=\"PARAMETERS\" value=\"\" />\r\n      <option name=\"SHOW_COMMAND_LINE\" value=\"false\" />\r\n      <option name=\"EMULATE_TERMINAL\" value=\"false\" />\r\n      <option name=\"MODULE_MODE\" value=\"false\" />\r\n      <option name=\"REDIRECT_INPUT\" value=\"false\" />\r\n      <option name=\"INPUT_FILE\" value=\"\" />\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <configuration name=\"user_loader\" type=\"PythonConfigurationType\" factoryName=\"Python\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <module name=\"pythonProject2_git_demo\" />\r\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\r\n      <option name=\"PARENT_ENVS\" value=\"true\" />\r\n      <envs>\r\n        <env name=\"PYTHONUNBUFFERED\" value=\"1\" />\r\n      </envs>\r\n      <option name=\"SDK_HOME\" value=\"\" />\r\n      <option name=\"WORKING_DIRECTORY\" value=\"$PROJECT_DIR$/TrabajoPractico\" />\r\n      <option name=\"IS_MODULE_SDK\" value=\"true\" />\r\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\r\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\r\n      <EXTENSION ID=\"PythonCoverageRunConfigurationExtension\" runner=\"coverage.py\" />\r\n      <option name=\"SCRIPT_NAME\" value=\"$PROJECT_DIR$/TrabajoPractico/user_loader.py\" />\r\n      <option name=\"PARAMETERS\" value=\"\" />\r\n      <option name=\"SHOW_COMMAND_LINE\" value=\"false\" />\r\n      <option name=\"EMULATE_TERMINAL\" value=\"false\" />\r\n      <option name=\"MODULE_MODE\" value=\"false\" />\r\n      <option name=\"REDIRECT_INPUT\" value=\"false\" />\r\n      <option name=\"INPUT_FILE\" value=\"\" />\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <configuration name=\"Flask (TrabajoPractico/user_endpoints.py)\" type=\"Python.FlaskServer\" nameIsGenerated=\"true\">\r\n      <module name=\"pythonProject2_git_demo\" />\r\n      <option name=\"target\" value=\"$PROJECT_DIR$/TrabajoPractico/user_endpoints.py\" />\r\n      <option name=\"targetType\" value=\"PATH\" />\r\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\r\n      <option name=\"PARENT_ENVS\" value=\"true\" />\r\n      <option name=\"SDK_HOME\" value=\"$PROJECT_DIR$/venv/bin/python\" />\r\n      <option name=\"WORKING_DIRECTORY\" value=\"$PROJECT_DIR$\" />\r\n      <option name=\"IS_MODULE_SDK\" value=\"false\" />\r\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\r\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\r\n      <EXTENSION ID=\"PythonCoverageRunConfigurationExtension\" runner=\"coverage.py\" />\r\n      <option name=\"launchJavascriptDebuger\" value=\"false\" />\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <list>\r\n      <item itemvalue=\"Flask server.Flask (TrabajoPractico/user_endpoints.py)\" />\r\n      <item itemvalue=\"Python.main\" />\r\n      <item itemvalue=\"Python.user_endpoints\" />\r\n      <item itemvalue=\"Python.menu\" />\r\n      <item itemvalue=\"Python.user_loader\" />\r\n    </list>\r\n    <recent_temporary>\r\n      <list>\r\n        <item itemvalue=\"Python.user_loader\" />\r\n        <item itemvalue=\"Python.menu\" />\r\n      </list>\r\n    </recent_temporary>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"7082fc12-00ec-43ae-a60b-6e1a922e3f08\" name=\"Changes\" comment=\"\" />\r\n      <created>1653405054220</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1653405054220</updated>\r\n      <workItem from=\"1653405058256\" duration=\"14000\" />\r\n      <workItem from=\"1653405116707\" duration=\"7000\" />\r\n      <workItem from=\"1653405138973\" duration=\"36000\" />\r\n      <workItem from=\"1653405344995\" duration=\"33000\" />\r\n      <workItem from=\"1654015184024\" duration=\"883000\" />\r\n      <workItem from=\"1654545521866\" duration=\"6829000\" />\r\n      <workItem from=\"1654558282953\" duration=\"2113000\" />\r\n      <workItem from=\"1654617774783\" duration=\"481000\" />\r\n      <workItem from=\"1654637681309\" duration=\"6122000\" />\r\n      <workItem from=\"1654690389411\" duration=\"288000\" />\r\n      <workItem from=\"1654778242482\" duration=\"32000\" />\r\n      <workItem from=\"1654778316675\" duration=\"248000\" />\r\n      <workItem from=\"1654778571146\" duration=\"90000\" />\r\n      <workItem from=\"1654779239746\" duration=\"418000\" />\r\n      <workItem from=\"1654786099856\" duration=\"1010000\" />\r\n      <workItem from=\"1654970938254\" duration=\"855000\" />\r\n      <workItem from=\"1654972684648\" duration=\"2826000\" />\r\n      <workItem from=\"1654976182870\" duration=\"5332000\" />\r\n      <workItem from=\"1655494096306\" duration=\"2524000\" />\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"&quot;new example&quot;\">\r\n      <created>1654779352646</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1654779352646</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00002\" summary=\"&quot;new example&quot;\">\r\n      <created>1654786180948</created>\r\n      <option name=\"number\" value=\"00002\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1654786180948</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00003\" summary=\"&quot;Avance endpoints&quot;\">\r\n      <created>1655496570763</created>\r\n      <option name=\"number\" value=\"00003\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00003\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1655496570763</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"4\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State />\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"&quot;new example&quot;\" />\r\n    <MESSAGE value=\"&quot;Avance endpoints&quot;\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"&quot;Avance endpoints&quot;\" />\r\n  </component>\r\n  <component name=\"com.intellij.coverage.CoverageDataManagerImpl\">\r\n    <SUITE FILE_PATH=\"coverage/pythonProject2_git_demo$menu.coverage\" NAME=\"menu Coverage Results\" MODIFIED=\"1654977050266\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"true\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$/CarpetaDemoGit\" />\r\n    <SUITE FILE_PATH=\"coverage/pythonProject2_git_demo$Flask__TrabajoPractico_user_endpoints_py_.coverage\" NAME=\"Flask (TrabajoPractico/user_endpoints.py) Coverage Results\" MODIFIED=\"1655496541697\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"true\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$\" />\r\n    <SUITE FILE_PATH=\"coverage/pythonProject2_git_demo$Flask__TrabajoPractico_usuarios_existentes_py_.coverage\" NAME=\"Flask (TrabajoPractico/user_endpoints.py) Coverage Results\" MODIFIED=\"1655491981817\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"true\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$\" />\r\n    <SUITE FILE_PATH=\"coverage/pythonProject2_git_demo$usuarios_existentes.coverage\" NAME=\"usuarios_existentes Coverage Results\" MODIFIED=\"1654977290251\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"true\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$/TrabajoPractico\" />\r\n    <SUITE FILE_PATH=\"coverage/pythonProject2_git_demo$user_loader.coverage\" NAME=\"user_loader Coverage Results\" MODIFIED=\"1655489907608\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"true\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$/TrabajoPractico\" />\r\n    <SUITE FILE_PATH=\"coverage/pythonProject2_git_demo$main.coverage\" NAME=\"main Coverage Results\" MODIFIED=\"1654786305766\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"true\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$\" />\r\n    <SUITE FILE_PATH=\"coverage/pythonProject2_git_demo$user_endpoints.coverage\" NAME=\"user_endpoints Coverage Results\" MODIFIED=\"1655491371899\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"true\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$/TrabajoPractico\" />\r\n    <SUITE FILE_PATH=\"coverage/pythonProject2_git_demo$Menu.coverage\" NAME=\"Menu Coverage Results\" MODIFIED=\"1654552885620\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"true\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$/CarpetaDemoGit\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 3692d4302d112bd610a9ece862957a9b3869025d)
++++ b/.idea/workspace.xml	(date 1655568565859)
+@@ -4,14 +4,15 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="7082fc12-00ec-43ae-a60b-6e1a922e3f08" name="Changes" comment="">
++    <list default="true" id="7082fc12-00ec-43ae-a60b-6e1a922e3f08" name="Changes" comment="&quot;new example&quot;">
++      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/pythonProject2_git_demo.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/pythonProject2_git_demo.iml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_06_2022_16_42.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_06_2022_16_42.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_17_06_2022_14_15.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_17_06_2022_14_15.xml" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/TrabajoPractico/User_loader.py" beforeDir="false" afterPath="$PROJECT_DIR$/TrabajoPractico/user_loader.py" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/TrabajoPractico/main.py" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/TrabajoPractico/menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/TrabajoPractico/menu.py" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/TrabajoPractico/usuario.py" beforeDir="false" afterPath="$PROJECT_DIR$/TrabajoPractico/user_class.py" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/TrabajoPractico/usuarios.json" beforeDir="false" afterPath="$PROJECT_DIR$/TrabajoPractico/usuarios.json" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/TrabajoPractico/usuarios_existentes.py" beforeDir="false" afterPath="$PROJECT_DIR$/TrabajoPractico/user_endpoints.py" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/TrabajoPractico/user_class.py" beforeDir="false" afterPath="$PROJECT_DIR$/TrabajoPractico/user_class.py" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/TrabajoPractico/user_endpoints.py" beforeDir="false" afterPath="$PROJECT_DIR$/TrabajoPractico/user_endpoints.py" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/TrabajoPractico/user_loader.py" beforeDir="false" afterPath="$PROJECT_DIR$/TrabajoPractico/user_loader.py" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -62,11 +63,12 @@
+     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+     <property name="WebServerToolWindowFactoryState" value="false" />
++    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Magdalena" />
+     <property name="node.js.detected.package.eslint" value="true" />
+     <property name="node.js.detected.package.tslint" value="true" />
+     <property name="node.js.selected.package.eslint" value="(autodetect)" />
+     <property name="node.js.selected.package.tslint" value="(autodetect)" />
+-    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
++    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+   </component>
+   <component name="RecentsManager">
+     <key name="MoveFile.RECENT_KEYS">
+@@ -74,7 +76,29 @@
+       <recent name="$PROJECT_DIR$" />
+     </key>
+   </component>
+-  <component name="RunManager" selected="Flask server.Flask (TrabajoPractico/user_endpoints.py)">
++  <component name="RunManager" selected="Flask server.Flask (user_endpoints.py)">
++    <configuration name="User_loader" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
++      <module name="pythonProject2_git_demo" />
++      <option name="INTERPRETER_OPTIONS" value="" />
++      <option name="PARENT_ENVS" value="true" />
++      <envs>
++        <env name="PYTHONUNBUFFERED" value="1" />
++      </envs>
++      <option name="SDK_HOME" value="C:\Users\user\Desktop\Martu\UCEMA\2do año\1er cuatri\Fundamentos de Informatica\Practica\Unidad_5\venv\interpreter\Scripts\python.exe" />
++      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/TrabajoPractico" />
++      <option name="IS_MODULE_SDK" value="false" />
++      <option name="ADD_CONTENT_ROOTS" value="true" />
++      <option name="ADD_SOURCE_ROOTS" value="true" />
++      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
++      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/TrabajoPractico/User_loader.py" />
++      <option name="PARAMETERS" value="" />
++      <option name="SHOW_COMMAND_LINE" value="false" />
++      <option name="EMULATE_TERMINAL" value="false" />
++      <option name="MODULE_MODE" value="false" />
++      <option name="REDIRECT_INPUT" value="false" />
++      <option name="INPUT_FILE" value="" />
++      <method v="2" />
++    </configuration>
+     <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+       <module name="pythonProject2_git_demo" />
+       <option name="INTERPRETER_OPTIONS" value="" />
+@@ -119,7 +143,7 @@
+       <option name="INPUT_FILE" value="" />
+       <method v="2" />
+     </configuration>
+-    <configuration name="user_endpoints" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
++    <configuration name="user_endpoints" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+       <module name="pythonProject2_git_demo" />
+       <option name="INTERPRETER_OPTIONS" value="" />
+       <option name="PARENT_ENVS" value="true" />
+@@ -141,7 +165,7 @@
+       <option name="INPUT_FILE" value="" />
+       <method v="2" />
+     </configuration>
+-    <configuration name="user_loader" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
++    <configuration name="usuarios_existentes" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+       <module name="pythonProject2_git_demo" />
+       <option name="INTERPRETER_OPTIONS" value="" />
+       <option name="PARENT_ENVS" value="true" />
+@@ -154,7 +178,7 @@
+       <option name="ADD_CONTENT_ROOTS" value="true" />
+       <option name="ADD_SOURCE_ROOTS" value="true" />
+       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/TrabajoPractico/user_loader.py" />
++      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/TrabajoPractico/usuarios_existentes.py" />
+       <option name="PARAMETERS" value="" />
+       <option name="SHOW_COMMAND_LINE" value="false" />
+       <option name="EMULATE_TERMINAL" value="false" />
+@@ -163,13 +187,28 @@
+       <option name="INPUT_FILE" value="" />
+       <method v="2" />
+     </configuration>
+-    <configuration name="Flask (TrabajoPractico/user_endpoints.py)" type="Python.FlaskServer" nameIsGenerated="true">
++    <configuration name="Flask (user_endpoints.py)" type="Python.FlaskServer" nameIsGenerated="true">
+       <module name="pythonProject2_git_demo" />
+-      <option name="target" value="$PROJECT_DIR$/TrabajoPractico/user_endpoints.py" />
++      <option name="target" value="C:\Users\magda\Documents\Universidad\Tercer_cuatrimestre\Fundamentos_de_informatica\Trabajo-Practico\TrabajoPractico\user_endpoints.py" />
+       <option name="targetType" value="PATH" />
+       <option name="INTERPRETER_OPTIONS" value="" />
+       <option name="PARENT_ENVS" value="true" />
+-      <option name="SDK_HOME" value="$PROJECT_DIR$/venv/bin/python" />
++      <option name="SDK_HOME" value="C:\Users\magda\AppData\Local\Programs\Python\Python39\python.exe" />
++      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/TrabajoPractico" />
++      <option name="IS_MODULE_SDK" value="false" />
++      <option name="ADD_CONTENT_ROOTS" value="true" />
++      <option name="ADD_SOURCE_ROOTS" value="true" />
++      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
++      <option name="launchJavascriptDebuger" value="false" />
++      <method v="2" />
++    </configuration>
++    <configuration name="Flask" type="Python.FlaskServer" nameIsGenerated="true">
++      <module name="pythonProject2_git_demo" />
++      <option name="target" value="$PROJECT_DIR$/TrabajoPractico/usuarios_existentes.py" />
++      <option name="targetType" value="PATH" />
++      <option name="INTERPRETER_OPTIONS" value="" />
++      <option name="PARENT_ENVS" value="true" />
++      <option name="SDK_HOME" value="C:\Users\magda\AppData\Local\Programs\Python\Python39\python.exe" />
+       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+       <option name="IS_MODULE_SDK" value="false" />
+       <option name="ADD_CONTENT_ROOTS" value="true" />
+@@ -179,15 +218,17 @@
+       <method v="2" />
+     </configuration>
+     <list>
+-      <item itemvalue="Flask server.Flask (TrabajoPractico/user_endpoints.py)" />
++      <item itemvalue="Flask server.Flask" />
++      <item itemvalue="Flask server.Flask (user_endpoints.py)" />
++      <item itemvalue="Python.User_loader" />
+       <item itemvalue="Python.main" />
++      <item itemvalue="Python.usuarios_existentes" />
++      <item itemvalue="Python.menu" />
+       <item itemvalue="Python.user_endpoints" />
+-      <item itemvalue="Python.menu" />
+-      <item itemvalue="Python.user_loader" />
+     </list>
+     <recent_temporary>
+       <list>
+-        <item itemvalue="Python.user_loader" />
++        <item itemvalue="Python.user_endpoints" />
+         <item itemvalue="Python.menu" />
+       </list>
+     </recent_temporary>
+@@ -218,7 +259,9 @@
+       <workItem from="1654970938254" duration="855000" />
+       <workItem from="1654972684648" duration="2826000" />
+       <workItem from="1654976182870" duration="5332000" />
+-      <workItem from="1655494096306" duration="2524000" />
++      <workItem from="1655470499707" duration="4120000" />
++      <workItem from="1655498245274" duration="1187000" />
++      <workItem from="1655557751129" duration="44000" />
+     </task>
+     <task id="LOCAL-00001" summary="&quot;new example&quot;">
+       <created>1654779352646</created>
+@@ -234,14 +277,7 @@
+       <option name="project" value="LOCAL" />
+       <updated>1654786180948</updated>
+     </task>
+-    <task id="LOCAL-00003" summary="&quot;Avance endpoints&quot;">
+-      <created>1655496570763</created>
+-      <option name="number" value="00003" />
+-      <option name="presentableId" value="LOCAL-00003" />
+-      <option name="project" value="LOCAL" />
+-      <updated>1655496570763</updated>
+-    </task>
+-    <option name="localTasksCounter" value="4" />
++    <option name="localTasksCounter" value="3" />
+     <servers />
+   </component>
+   <component name="TypeScriptGeneratedFilesManager">
+@@ -260,17 +296,15 @@
+   </component>
+   <component name="VcsManagerConfiguration">
+     <MESSAGE value="&quot;new example&quot;" />
+-    <MESSAGE value="&quot;Avance endpoints&quot;" />
+-    <option name="LAST_COMMIT_MESSAGE" value="&quot;Avance endpoints&quot;" />
++    <option name="LAST_COMMIT_MESSAGE" value="&quot;new example&quot;" />
+   </component>
+   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+-    <SUITE FILE_PATH="coverage/pythonProject2_git_demo$menu.coverage" NAME="menu Coverage Results" MODIFIED="1654977050266" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/CarpetaDemoGit" />
+-    <SUITE FILE_PATH="coverage/pythonProject2_git_demo$Flask__TrabajoPractico_user_endpoints_py_.coverage" NAME="Flask (TrabajoPractico/user_endpoints.py) Coverage Results" MODIFIED="1655496541697" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+-    <SUITE FILE_PATH="coverage/pythonProject2_git_demo$Flask__TrabajoPractico_usuarios_existentes_py_.coverage" NAME="Flask (TrabajoPractico/user_endpoints.py) Coverage Results" MODIFIED="1655491981817" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+     <SUITE FILE_PATH="coverage/pythonProject2_git_demo$usuarios_existentes.coverage" NAME="usuarios_existentes Coverage Results" MODIFIED="1654977290251" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/TrabajoPractico" />
+-    <SUITE FILE_PATH="coverage/pythonProject2_git_demo$user_loader.coverage" NAME="user_loader Coverage Results" MODIFIED="1655489907608" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/TrabajoPractico" />
++    <SUITE FILE_PATH="coverage/pythonProject2_git_demo$User_loader.coverage" NAME="User_loader Coverage Results" MODIFIED="1655472657360" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/TrabajoPractico" />
+     <SUITE FILE_PATH="coverage/pythonProject2_git_demo$main.coverage" NAME="main Coverage Results" MODIFIED="1654786305766" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+-    <SUITE FILE_PATH="coverage/pythonProject2_git_demo$user_endpoints.coverage" NAME="user_endpoints Coverage Results" MODIFIED="1655491371899" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/TrabajoPractico" />
++    <SUITE FILE_PATH="coverage/pythonProject2_git_demo$Flask__TrabajoPractico_usuarios_existentes_py_.coverage" NAME="Flask (TrabajoPractico/usuarios_existentes.py) Coverage Results" MODIFIED="1654981584545" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+     <SUITE FILE_PATH="coverage/pythonProject2_git_demo$Menu.coverage" NAME="Menu Coverage Results" MODIFIED="1654552885620" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/CarpetaDemoGit" />
++    <SUITE FILE_PATH="coverage/pythonProject2_git_demo$menu.coverage" NAME="menu Coverage Results" MODIFIED="1654977050266" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/CarpetaDemoGit" />
++    <SUITE FILE_PATH="coverage/pythonProject2_git_demo$Flask__user_endpoints_py_.coverage" NAME="Flask (user_endpoints.py) Coverage Results" MODIFIED="1655498963857" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/TrabajoPractico" />
+   </component>
+ </project>
+\ No newline at end of file
